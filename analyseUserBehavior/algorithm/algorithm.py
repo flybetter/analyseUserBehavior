@@ -8,12 +8,14 @@ import pickle
 
 from pyhdfs import HdfsClient
 
-HDFS_NEWHOUSE_PATH = "/recom/test/testNewHouse.txt__f1be1a82_457a_4b75_b5d4_b80f082086a2"
-HDFS_NEWHOUSELOG_PATH = "/recom/testLog/testLog.txt__b8321c25_a23c_4d8d_a7d5_ab76f661aa96"
+HDFS_NEWHOUSE_PATH = "/recom/test/testNewHouse.txt__4b220fde_869d_46a4_bd75_bfec350a1af7"
+HDFS_NEWHOUSELOG_PATH = "/recom/testLog/testLog.txt__9744cc4b_24bb_4b65_a9ae_e9be577ca9f9"
 
 REDIS_HOST = "192.168.10.221"
 
 REMAIN_DAYS = 30
+
+REDIS_PREFIX = "NHLOG^"
 
 
 def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
@@ -21,7 +23,7 @@ def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
     client = HdfsClient(hosts='192.168.10.221:50070')
     data = client.open(path)
     colName = ["PRJ_LISTID", "CHANNEL", "CITY", "CITY_NAME", "PRJ_ITEMNAME", "PRJ_LOC", "PRJ_DECORATE", "PRJ_VIEWS",
-               "B_LNG", "B_LAT", "PRICE_AVG"]
+               "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
     df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
                      dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64})
     return df
@@ -58,7 +60,7 @@ def redis_action(df):
         for date, values in data.groupby("DATA_DATE"):
             print(date)
             print(values.to_json(orient="records", force_ascii=False))
-            redis_push(device_id, values.to_json(orient="records", force_ascii=False))
+            redis_push(REDIS_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 
 
 def redis_push(name, value):
