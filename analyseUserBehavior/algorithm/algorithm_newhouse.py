@@ -4,7 +4,6 @@ import numpy as np
 from io import StringIO
 import datetime
 import redis
-import pickle
 
 from pyhdfs import HdfsClient
 
@@ -15,7 +14,7 @@ REDIS_HOST = "192.168.10.221"
 
 REMAIN_DAYS = 30
 
-REDIS_PREFIX = "NHLOG^"
+REDIS_NEWHOUSE_PREFIX = "NHLOG^"
 
 
 def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
@@ -26,6 +25,7 @@ def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
                "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
     df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
                      dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64})
+    print(df.head())
     return df
 
 
@@ -60,7 +60,7 @@ def redis_action(df):
         for date, values in data.groupby("DATA_DATE"):
             print(date)
             print(values.to_json(orient="records", force_ascii=False))
-            redis_push(REDIS_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
+            redis_push(REDIS_NEWHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 
 
 def redis_push(name, value):
@@ -72,8 +72,8 @@ def redis_push(name, value):
 
 
 if __name__ == '__main__':
-    df_newhouselog = get_newhouselog_data()
+    # df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
-    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
-    df_preparation = preparation(df_merge_data)
-    redis_action(df_preparation)
+    # df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
+    # df_preparation = preparation(df_merge_data)
+    # redis_action(df_preparation)
