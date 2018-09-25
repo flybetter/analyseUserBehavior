@@ -5,7 +5,6 @@ from io import StringIO
 import datetime
 import redis
 
-
 from pyhdfs import HdfsClient
 
 HDFS_NEWHOUSE_PATH = "/recom/newHouse/"
@@ -68,11 +67,19 @@ def redis_action(df):
 
 
 def redis_push(name, value):
-    r = redis.Redis(host=REDIS_HOST, port=6379)
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=1)
     r.lpush(name, value)
     num = r.llen(name)
     if num > 30:
         r.rpop(name)
+
+
+def begin():
+    df_newhouselog = get_newhouselog_data()
+    df_newhouse = get_newhouse_data()
+    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
+    df_preparation = preparation(df_merge_data)
+    redis_action(df_preparation)
 
 
 if __name__ == '__main__':
@@ -80,4 +87,4 @@ if __name__ == '__main__':
     df_newhouse = get_newhouse_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
     df_preparation = preparation(df_merge_data)
-    # redis_action(df_preparation)
+    redis_action(df_preparation)

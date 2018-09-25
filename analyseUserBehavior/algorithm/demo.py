@@ -4,7 +4,7 @@ from analyseUserBehavior.algorithm.algorithm_newhouse import REDIS_HOST
 
 
 def count_value():
-    r = redis.Redis(host=REDIS_HOST, port=6379)
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=1)
     r.lpush("04556DE6-4A99-496A-B8D1-371364D1B17B", "22")
 
 

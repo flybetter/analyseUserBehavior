@@ -19,12 +19,17 @@ def get_phonedevice_data(path=HDFS_PHONEDEVICE_PATH):
 
 
 def redis_action(df):
-    r = redis.Redis(host='192.168.10.221', port=6379)
+    r = redis.Redis(host='192.168.10.221', port=6379, db=1)
     for name, data in df.groupby("PHONE"):
         print(name)
         for value in json.loads(data["DEVICE"].to_json(orient='split', index=False))['data']:
             print(value)
             r.sadd(REDIS_PHONEDEVICE_PREFIX + str(name), value)
+
+
+def begin():
+    df = get_phonedevice_data()
+    redis_action(df)
 
 
 if __name__ == '__main__':
