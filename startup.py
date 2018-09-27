@@ -23,7 +23,7 @@ if __name__ == '__main__':
     timez = pytz.timezone('Asia/Shanghai')
     scheduler = BlockingScheduler(timezone=timez)
     scheduler.add_executor('processpool')
-    scheduler.add_job(begin, 'cron', hour=23, minute=00, second=00)
+    scheduler.add_job(begin, 'cron', hour=4, minute=00, second=00)
     # scheduler.add_job(begin2, 'interval', seconds=2)
     scheduler.start()
     # begin()

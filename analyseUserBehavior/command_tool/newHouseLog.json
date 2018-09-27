@@ -1,0 +1,64 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+            	"channel": 5
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "oraclereader",
+                    "parameter": {
+                        "username": "app",
+                        "password": "app",
+                        "where": "",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "select DEVICE_ID,CONTEXT_ID,CITY,DATA_DATE,LOGIN_ACCOUNT from DWB_DA_APP_STATISTICS where DATA_DATE between '20180820' and '20180920' and CONTEXT_ID is not null and PAGE_ID in('HouseDetailViewController','com.house365.newhouse.ui.newhome.NewHouseDetailActivity','com.house365.newhouse.ui.newhome.NewHouseDetailActivity$14','NewHouseDetailViewController','com.house365.newhouse.ui.newhome.NewHouseRefectorActivity','newhouse_detail') and CONTEXT_ID like '_-%'"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "writer": {
+                    "name": "hdfswriter",
+                    "parameter": {
+                        "defaultFS": "hdfs://michaelserver:9000",
+                        "fileType": "text",
+                        "path": "/recom/newHouseLog",
+                        "fileName": "newHouseLog.txt",
+                        "column": [
+                            {
+                                "name": "DEVICE_ID",
+                                "type": "VARCHAR"
+                            },
+                            {
+                                "name": "CONTEXT_ID",
+                                "type": "VARCHAR"
+                            },
+                            {
+                                "name": "CITY",
+                                "type": "VARCHAR"
+                            },
+                            {
+                                "name": "DATA_DATE",
+                                "type": "VARCHAR"
+                            },
+                            {
+                                "name": "LOGIN_ACCOUNT",
+                                "type": "VARCHAR"
+                            }
+                        ],
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t"
+                    }
+                }
+            }
+        ]
+    }
+}
