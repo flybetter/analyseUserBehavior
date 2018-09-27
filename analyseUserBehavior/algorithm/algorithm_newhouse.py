@@ -34,7 +34,7 @@ def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
     client = HdfsClient(hosts='192.168.10.221:50070')
     paths = client.listdir(HDFS_NEWHOUSELOG_PATH)
     for path in paths:
-        data = client.open(path)
+        data = client.open(HDFS_NEWHOUSELOG_PATH+path)
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT"]
         df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
                          parse_dates=["DATA_DATE"], dtype={'LOGIN_ACCOUNT': np.str}, na_values=" ")

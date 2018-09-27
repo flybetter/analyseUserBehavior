@@ -1,11 +1,11 @@
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import re
 
 # FILES = ["newHouse.json", "newHouseLog.json", "phoneDevice.json"]
 # newHouse.json is a full scale
-FILES = ["/home/michael/python_project/analyseUserBehavior/analyseUserBehavior/command_tool/newHouseLog.json",
-         "/home/michael/python_project/analyseUserBehavior/analyseUserBehavior/command_tool/phoneDevice.json"]
+FILES = ["/app/datax/bin/newHouseLog.json",
+         "/app/datax/bin/phoneDevice.json"]
 
 
 def format_json(date, file):
@@ -17,12 +17,12 @@ def format_json(date, file):
 
 
 def begin():
-    date = datetime.today().strftime("%Y%m%d")
+    date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
     for file in FILES:
         format_json(date, file)
 
 
 if __name__ == '__main__':
-    date = datetime.today().strftime("%Y%m%d")
+    date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
     for file in FILES:
         format_json(date, file)

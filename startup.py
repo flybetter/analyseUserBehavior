@@ -1,6 +1,7 @@
 from analyseUserBehavior.algorithm import algorithm_newhouse, algorithm_phoneDevice
 from analyseUserBehavior.command_tool import create_json, tools
 from apscheduler.schedulers.blocking import BlockingScheduler
+import pytz
 
 
 def begin():
@@ -19,7 +20,10 @@ def begin2():
 
 
 if __name__ == '__main__':
-    scheduler = BlockingScheduler()
+    timez = pytz.timezone('Asia/Shanghai')
+    scheduler = BlockingScheduler(timezone=timez)
     scheduler.add_executor('processpool')
-    scheduler.add_job(begin, 'cron', hour=22, minute=00, second=00)
+    scheduler.add_job(begin, 'cron', hour=23, minute=00, second=00)
+    # scheduler.add_job(begin2, 'interval', seconds=2)
     scheduler.start()
+    # begin()
