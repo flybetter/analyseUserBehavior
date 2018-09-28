@@ -34,10 +34,10 @@ def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
     client = HdfsClient(hosts='192.168.10.221:50070')
     paths = client.listdir(HDFS_NEWHOUSELOG_PATH)
     for path in paths:
-        data = client.open(HDFS_NEWHOUSELOG_PATH+path)
+        data = client.open(HDFS_NEWHOUSELOG_PATH + path)
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT"]
-        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
-                         parse_dates=["DATA_DATE"], dtype={'LOGIN_ACCOUNT': np.str}, na_values=" ")
+        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delim_whitespace=True,
+                         parse_dates=["DATA_DATE"], dtype={'LOGIN_ACCOUNT': np.str}, na_values="null")
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = df["CHANNEL"].astype("int64")
         df["CONTEXT"] = df["CONTEXT"].astype("int64")
@@ -48,7 +48,6 @@ def merge_newhouse(df_newhouse, df_newhouselog):
     df = pd.merge(left=df_newhouselog, right=df_newhouse, how="left",
                   left_on=['CITY', 'CHANNEL', 'CONTEXT'],
                   right_on=['CITY_NAME', 'CHANNEL', 'PRJ_LISTID'])
-    print(df.info())
     return df
 
 
@@ -61,7 +60,6 @@ def redis_action(df):
     for device_id, data in df.groupby("DEVICE_ID"):
         print(device_id)
         for date, values in data.groupby("DATA_DATE"):
-            print(date)
             print(values.to_json(orient="records", force_ascii=False))
             redis_push(REDIS_NEWHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 

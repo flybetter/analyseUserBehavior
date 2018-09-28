@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, date, timedelta
 import re
+import pytz
+
 
 # FILES = ["newHouse.json", "newHouseLog.json", "phoneDevice.json"]
 # newHouse.json is a full scale
@@ -17,7 +19,8 @@ def format_json(date, file):
 
 
 def begin():
-    date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
+    timez = pytz.timezone('Asia/Shanghai')
+    date = (datetime().now(tz=timez) - timedelta(days=1)).strftime("%Y%m%d")
     for file in FILES:
         format_json(date, file)
 
