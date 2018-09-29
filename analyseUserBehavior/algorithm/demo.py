@@ -1,6 +1,7 @@
 import pandas as pd
 import redis
 from analyseUserBehavior.algorithm.algorithm_newhouse import REDIS_HOST
+import re
 
 
 def count_value():
@@ -8,5 +9,16 @@ def count_value():
     r.lpush("04556DE6-4A99-496A-B8D1-371364D1B17B", "22")
 
 
+def test():
+    with open("select_CONTEXT_ID______from_DWB_DA_APP_S.csv") as f:
+        result = list()
+
+        for line in f.readlines():
+            print(line, '**' + str(len(line)))
+            result.append(len(line))
+
+        print(max(result))
+
+
 if __name__ == '__main__':
-    count_value()
+    test()

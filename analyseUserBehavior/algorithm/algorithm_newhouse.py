@@ -40,7 +40,10 @@ def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
                          parse_dates=["DATA_DATE"], dtype={'LOGIN_ACCOUNT': np.str}, na_values="null")
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = df["CHANNEL"].astype("int64")
+        df['CONTEXT'] = pd.to_numeric(df['CONTEXT'], errors='coerce')
+        df = df.dropna(subset=['CONTEXT'])
         df["CONTEXT"] = df["CONTEXT"].astype("int64")
+        df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d')
         return df
 
 
