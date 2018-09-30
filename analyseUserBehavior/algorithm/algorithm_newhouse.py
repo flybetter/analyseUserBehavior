@@ -37,13 +37,14 @@ def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
         data = client.open(HDFS_NEWHOUSELOG_PATH + path)
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT"]
         df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delim_whitespace=True,
-                         parse_dates=["DATA_DATE"], dtype={'LOGIN_ACCOUNT': np.str}, na_values="null")
+                         dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = df["CHANNEL"].astype("int64")
         df['CONTEXT'] = pd.to_numeric(df['CONTEXT'], errors='coerce')
         df = df.dropna(subset=['CONTEXT'])
         df["CONTEXT"] = df["CONTEXT"].astype("int64")
-        df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d')
+        df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d', errors='coerce')
+        df = df.dropna(subset=['DATA_DATE'])
         return df
 
 
