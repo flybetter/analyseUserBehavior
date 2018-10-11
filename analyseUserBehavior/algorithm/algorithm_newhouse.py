@@ -17,12 +17,12 @@ REMAIN_DAYS = 30
 REDIS_NEWHOUSE_PREFIX = "NHLOG^"
 
 
-def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
+def get_newhouse_data(hadoop_path=HDFS_NEWHOUSE_PATH):
     # TODO 安卓那边的埋点数据，有数据会丢
     client = HdfsClient(hosts='192.168.10.221:50070')
-    paths = client.listdir(HDFS_NEWHOUSE_PATH)
+    paths = client.listdir(hadoop_path)
     for path in paths:
-        data = client.open(HDFS_NEWHOUSE_PATH + path)
+        data = client.open(hadoop_path + path)
         colName = ["PRJ_LISTID", "CHANNEL", "CITY", "CITY_NAME", "PRJ_ITEMNAME", "PRJ_LOC", "PRJ_DECORATE", "PRJ_VIEWS",
                    "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
         df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
@@ -30,14 +30,15 @@ def get_newhouse_data(path=HDFS_NEWHOUSE_PATH):
         return df
 
 
-def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
+def get_newhouselog_data(hadoop_path=HDFS_NEWHOUSELOG_PATH):
     client = HdfsClient(hosts='192.168.10.221:50070')
-    paths = client.listdir(HDFS_NEWHOUSELOG_PATH)
+    paths = client.listdir(hadoop_path)
     for path in paths:
-        data = client.open(HDFS_NEWHOUSELOG_PATH + path)
-        colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT"]
-        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delim_whitespace=True,
+        data = client.open(hadoop_path + path)
+        colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME"]
+        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None,
                          dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
+
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = df["CHANNEL"].astype("int64")
         df['CONTEXT'] = pd.to_numeric(df['CONTEXT'], errors='coerce')
@@ -45,6 +46,10 @@ def get_newhouselog_data(path=HDFS_NEWHOUSELOG_PATH):
         df["CONTEXT"] = df["CONTEXT"].astype("int64")
         df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d', errors='coerce')
         df = df.dropna(subset=['DATA_DATE'])
+        df['START_TIME'] = pd.to_datetime(df['START_TIME'], errors='coerce')
+        df = df.dropna(subset=['START_TIME'])
+        df['END_TIME'] = pd.to_datetime(df['END_TIME'], errors='coerce')
+        df = df.dropna(subset=['END_TIME'])
         return df
 
 
@@ -85,6 +90,7 @@ def begin():
 
 
 if __name__ == '__main__':
+    temp = "/recom/testLog/"
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
