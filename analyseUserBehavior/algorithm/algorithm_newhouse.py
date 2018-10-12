@@ -74,8 +74,7 @@ def redis_action(df):
 
 
 def redis_push(name, value):
-    # TODO 暂时修改redis的库地址
-    r = redis.Redis(host=REDIS_HOST, port=6379, db=2)
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=1)
     r.lpush(name, value)
     num = r.llen(name)
     if num > 30:
