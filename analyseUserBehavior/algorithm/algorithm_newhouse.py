@@ -74,7 +74,8 @@ def redis_action(df):
 
 
 def redis_push(name, value):
-    r = redis.Redis(host=REDIS_HOST, port=6379, db=1)
+    # TODO 暂时修改redis的库地址
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=2)
     r.lpush(name, value)
     num = r.llen(name)
     if num > 30:
@@ -90,7 +91,7 @@ def begin():
 
 
 if __name__ == '__main__':
-    temp = "/recom/testLog/"
+    # temp = "/recom/testLog/"
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
