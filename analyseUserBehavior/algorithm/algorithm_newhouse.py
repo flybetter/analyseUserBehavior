@@ -1,42 +1,36 @@
 # coding=UTF-8
 import pandas as pd
 import numpy as np
-from io import StringIO
-import datetime
 import redis
+import os
+from ..config.gobal_config import get_config
 
-from pyhdfs import HdfsClient
-
-HDFS_NEWHOUSE_PATH = "/recom/newHouse/"
-HDFS_NEWHOUSELOG_PATH = "/recom/newHouseLog/"
-
-REDIS_HOST = "192.168.10.221"
-
-REMAIN_DAYS = 30
-
-REDIS_NEWHOUSE_PREFIX = "NHLOG^"
+file_newhouse_path = get_config('FILE_NEWHOUSE_PATH')
+file_newhouselog_path = get_config('FILE_NEWHOUSELOG_PATH')
+redis_host = get_config('REDIS_HOST')
+remain_days = get_config('REMAIN_DAYS')
+redis_newhouse_prefix = get_config('REDIS_NEWHOUSE_PREFIX')
+redis_db = get_config("REDIS_DB")
 
 
-def get_newhouse_data(hadoop_path=HDFS_NEWHOUSE_PATH):
-    # TODO 安卓那边的埋点数据，有数据会丢
-    client = HdfsClient(hosts='192.168.10.221:50070')
-    paths = client.listdir(hadoop_path)
+def get_newhouse_data(file_path=file_newhouse_path):
+    paths = os.listdir(file_path)
     for path in paths:
-        data = client.open(hadoop_path + path)
+        print(file_path)
         colName = ["PRJ_LISTID", "CHANNEL", "CITY", "CITY_NAME", "PRJ_ITEMNAME", "PRJ_LOC", "PRJ_DECORATE", "PRJ_VIEWS",
                    "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
-        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None, delimiter="\t",
+        df = pd.read_csv(file_path + path, names=colName, header=None,
                          dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64})
+        print(df.head(100))
         return df
 
 
-def get_newhouselog_data(hadoop_path=HDFS_NEWHOUSELOG_PATH):
-    client = HdfsClient(hosts='192.168.10.221:50070')
-    paths = client.listdir(hadoop_path)
+def get_newhouselog_data(file_path=file_newhouselog_path):
+    paths = os.listdir(file_path)
     for path in paths:
-        data = client.open(hadoop_path + path)
+        print(path)
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME"]
-        df = pd.read_csv(StringIO(data.read().decode('utf-8')), names=colName, header=None,
+        df = pd.read_csv(file_path + path, names=colName, header=None,
                          dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
 
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
@@ -50,6 +44,7 @@ def get_newhouselog_data(hadoop_path=HDFS_NEWHOUSELOG_PATH):
         df = df.dropna(subset=['START_TIME'])
         df['END_TIME'] = pd.to_datetime(df['END_TIME'], errors='coerce')
         df = df.dropna(subset=['END_TIME'])
+        print(df.head(100))
         return df
 
 
@@ -67,17 +62,16 @@ def preparation(df):
 
 def redis_action(df):
     for device_id, data in df.groupby("DEVICE_ID"):
-        print(device_id)
         for date, values in data.groupby("DATA_DATE"):
             print(values.to_json(orient="records", force_ascii=False))
-            redis_push(REDIS_NEWHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
+            redis_push(redis_newhouse_prefix + device_id, values.to_json(orient="records", force_ascii=False))
 
 
 def redis_push(name, value):
-    r = redis.Redis(host=REDIS_HOST, port=6379, db=1)
+    r = redis.Redis(host=redis_host, port=6379, db=redis_db)
     r.lpush(name, value)
     num = r.llen(name)
-    if num > 30:
+    if num > int(remain_days):
         r.rpop(name)
 
 
@@ -90,7 +84,6 @@ def begin():
 
 
 if __name__ == '__main__':
-    # temp = "/recom/testLog/"
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)

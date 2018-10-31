@@ -1,92 +1,40 @@
 {
-    "job": {
-        "setting": {
-            "speed": {
-            	"channel": 5
-            }
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select pr.PRJ_LISTID,ch.CHANNEL,ch.CITY,city.CITY_NAME,pr.PRJ_ITEMNAME,pr.PRJ_LOC,pr.PRJ_DECORATE,pr.PRJ_VIEWS,pr.B_LNG,pr.B_LAT,ch.price_avg,ch.price_show from DWB_WEB_PROJECT pr  join dwb_web_w_channel ch on pr.PRJ_ID=ch.PRJ_ID  join DWD_REC_CITY city on city.CITY_ID =pr.PRJ_CITY where  pr.PRJ_DISP=1 and pr.B_LNG !=0 and pr.B_LNG is not null "
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                ]
+              }
+            ]
+          }
         },
-        "content": [
-            {
-                "reader": {
-                    "name": "oraclereader",
-                    "parameter": {
-                        "username": "app",
-                        "password": "app",
-                        "where": "",
-                        "connection": [
-                            {
-                                "querySql": [
-                                    "select pr.PRJ_LISTID,ch.CHANNEL,ch.CITY,city.CITY_NAME,pr.PRJ_ITEMNAME,pr.PRJ_LOC,pr.PRJ_DECORATE,pr.PRJ_VIEWS,pr.B_LNG,pr.B_LAT,ch.price_avg,ch.price_show from DWB_WEB_PROJECT pr  join dwb_web_w_channel ch on pr.PRJ_ID=ch.PRJ_ID  join DWD_REC_CITY city on city.CITY_ID =pr.PRJ_CITY where  pr.PRJ_DISP=1 and pr.B_LNG !=0 and pr.B_LNG is not null "
-                                ],
-                                "jdbcUrl": [
-                                    "jdbc:oracle:thin:@202.102.83.165:1521:app"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                "writer": {
-                    "name": "hdfswriter",
-                    "parameter": {
-                        "defaultFS": "hdfs://michaelserver:9000",
-                        "fileType": "text",
-                        "path": "/recom/newHouse",
-                        "fileName": "newHouse.txt",
-                        "column": [
-                            {
-                                "name": "PRJ_LISTID",
-                                "type": "BIGINT"
-                            },
-                            {
-                                "name": "CHANNEL",
-                                "type": "INT"
-                            },
-                            {
-                                "name": "CITY",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "CITY_NAME",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "PRJ_ITEMNAME",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "PRJ_LOC",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "PRJ_DECORATE",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "PRJ_VIEWS",
-                                "type": "BIGINT"
-                            },
-                            {
-                                "name": "B_LNG",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "B_LAT",
-                                "type": "VARCHAR"
-                            },
-                            {
-                                "name": "price_avg",
-                                "type": "DOUBLE"
-                            },
-                            {
-                                "name": "price_show",
-                                "type": "VARCHAR"
-                            }
-                        ],
-                        "writeMode": "truncate",
-                        "fieldDelimiter": "\t"
-                    }
-                }
-            }
-        ]
-    }
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/newHouse/",
+            "fileName": "newHouse.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss"
+          }
+        }
+      }
+    ]
+  }
 }

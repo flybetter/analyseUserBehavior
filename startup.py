@@ -1,5 +1,5 @@
 from analyseUserBehavior.algorithm import algorithm_newhouse, algorithm_phoneDevice
-from analyseUserBehavior.command_tool import create_json, tools
+from analyseUserBehavior.command_tool import create_json, datax_command
 from apscheduler.schedulers.blocking import BlockingScheduler
 import pytz
 import datetime
@@ -8,7 +8,7 @@ import datetime
 def begin():
     create_json.begin()
     print("create_json finished")
-    tools.begin()
+    datax_command.begin()
     print("datax finished")
     algorithm_newhouse.begin()
     print("algorithm_newhouse hdfs synchronous finished ")
