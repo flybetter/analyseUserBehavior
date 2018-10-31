@@ -1,7 +1,5 @@
 import pandas as pd
-from pyhdfs import HdfsClient
 import redis
-from io import StringIO
 import json
 from ..config.gobal_config import get_config
 import os
