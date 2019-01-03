@@ -19,11 +19,4 @@ def get_config(name):
 if __name__ == '__main__':
     value = get_config('REDIS_HOST')
     print(value)
-    # con = ConfigParser()
-    # res = con.get_config('FILE_PHONEDEVICE_PATH')
-    # print(os.path.abspath(__file__))
-    # print(res)
-    # paths = os.listdir(res)
-    # for path in paths:
-    #     df = pd.read_csv(res + path)
-    #     print(df.head(100))
+

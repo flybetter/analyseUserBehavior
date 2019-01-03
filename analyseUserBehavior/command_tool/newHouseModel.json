@@ -1,0 +1,40 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select PIC_ID,PIC_PRJID,PIC_PRJNAME,PIC_TYPE,PIC_DESC,PIC_TING,PIC_WEI,PIC_CHU,PIC_AREA,PIC_SELL_POINT,PIC_HX_TOTALPRICE from DWB_PROJECT_PICTURE"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@172.17.1.195:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/newHouseModel/",
+            "fileName": "newHouseModel.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss"
+          }
+        }
+      }
+    ]
+  }
+}
