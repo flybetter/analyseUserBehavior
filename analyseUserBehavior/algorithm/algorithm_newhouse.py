@@ -3,14 +3,35 @@ import pandas as pd
 import numpy as np
 import redis
 import os
+import json
 from ..config.gobal_config import get_config
 
 file_newhouse_path = get_config('FILE_NEWHOUSE_PATH')
 file_newhouselog_path = get_config('FILE_NEWHOUSELOG_PATH')
+file_newhouseroom_path = get_config('FILE_NEWHOUSEROOM_PATH')
+file_newhousemodel_path = get_config('FILE_NEWHOUSEMODEL_PATH')
 redis_host = get_config('REDIS_HOST')
 remain_days = get_config('REMAIN_DAYS')
 redis_newhouse_prefix = get_config('REDIS_NEWHOUSE_PREFIX')
 redis_db = get_config("REDIS_DB")
+
+
+def custom(df):
+    try:
+        object = json.loads(df['CONTENT'])
+        df['ROOMID'] = object.get('roomid', np.NaN)
+        df['PROJECTTYPE'] = object.get('projectType', np.NaN)
+        df['MODELID'] = object.get('modelId', np.NaN)
+        df['PROJECTID'] = object.get('projectId', np.NaN)
+        df['SHAIXUAN'] = object.get('shaiXuan', np.NaN)
+        return df
+    except:
+        df['ROOMID'] = np.NaN
+        df['PROJECTTYPE'] = np.NaN
+        df['MODELID'] = np.NaN
+        df['PROJECTID'] = np.NaN
+        df['SHAIXUAN'] = np.NaN
+        return df
 
 
 def get_newhouse_data(file_path=file_newhouse_path):
@@ -29,7 +50,8 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
-        colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME"]
+        colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME", "CONTENT",
+                   "OBJECT_ID"]
         df = pd.read_csv(file_path + path, names=colName, header=None,
                          dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
 
@@ -44,14 +66,36 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         df = df.dropna(subset=['START_TIME'])
         df['END_TIME'] = pd.to_datetime(df['END_TIME'], errors='coerce')
         df = df.dropna(subset=['END_TIME'])
+        df = df.apply(custom, axis=1)
         print(df.head(100))
         return df
 
 
-def merge_newhouse(df_newhouse, df_newhouselog):
+def get_newhousemodel_data(file_path=file_newhousemodel_path):
+    paths = os.listdir(file_path)
+    for path in paths:
+        print(path)
+        colName = ['PIC_ID', 'PIC_PRJID', 'PIC_PRJNAME', 'PIC_TYPE', 'PIC_DESC', 'PIC_TING', 'PIC_WEI', 'PIC_CHU',
+                   'PIC_AREA', 'PIC_SELL_POINT', 'PIC_HX_TOTALPRICE']
+        df = pd.read_csv(file_path + path, names=colName, header=None, dtype={'PIC_ID': object})
+        return df
+
+
+def get_newhouseroom_data(file_path=file_newhouseroom_path):
+    paths = os.listdir(file_path)
+    for path in paths:
+        print(path)
+        colName = ['ROOM_ID', 'FLATS', 'PRICE', 'TOTALPRICE']
+        df = pd.read_csv(file_path + path, names=colName, header=None, dtype={'room_id': object})
+        return df
+
+
+def merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom):
     df = pd.merge(left=df_newhouselog, right=df_newhouse, how="left",
                   left_on=['CITY', 'CHANNEL', 'CONTEXT'],
                   right_on=['CITY_NAME', 'CHANNEL', 'PRJ_LISTID'])
+    df = df.merge(df_newhousemodel, left_on='MODELID', right_on='PIC_ID', how='left')
+    df = df.merge(df_newhouseroom, left_on='ROOMID', right_on='ROOM_ID', how='left')
     return df
 
 
@@ -78,7 +122,9 @@ def redis_push(name, value):
 def begin():
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
-    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
+    df_newhousemodel = get_newhousemodel_data()
+    df_newhouseroom = get_newhouseroom_data()
+    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
     redis_action(df_preparation)
 

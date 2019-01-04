@@ -1,4 +1,3 @@
-//TODO the table data no in the oracle
 {
   "job": {
     "setting": {
@@ -17,7 +16,7 @@
             "connection": [
               {
                 "querySql": [
-                  "select id,flats,price,totalprice from DWB_YFYJ_ROOM;"
+                  "select id,flats,price,totalprice from DWB_YFYJ_ROOM"
                 ],
                 "jdbcUrl": [
                   "jdbc:oracle:thin:@172.17.1.195:1521:app"

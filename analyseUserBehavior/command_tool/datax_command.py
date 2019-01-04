@@ -4,7 +4,9 @@ import sys
 COMMANDS = [
     "python /app/datax/bin/datax.py /app/datax/bin/newHouseLog.json",
     "python /app/datax/bin/datax.py /app/datax/bin/newHouse.json",
-    "python /app/datax/bin/datax.py /app/datax/bin/phoneDevice.json"]
+    "python /app/datax/bin/datax.py /app/datax/bin/phoneDevice.json",
+    "python /app/datax/bin/datax.py /app/datax/bin/newHouseRoom.json",
+    "python /app/datax/bin/datax.py /app/datax/bin/newHouseModel.json"]
 
 
 def action(command):
