@@ -56,9 +56,8 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
                          dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
 
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
-        df["CHANNEL"] = df["CHANNEL"].astype("int64")
+        df["CHANNEL"] = pd.to_numeric(df['CHANNEL'], errors='coerce')
         df['CONTEXT'] = pd.to_numeric(df['CONTEXT'], errors='coerce')
-        df = df.dropna(subset=['CONTEXT'])
         df["CONTEXT"] = df["CONTEXT"].astype("int64")
         df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d', errors='coerce')
         df = df.dropna(subset=['DATA_DATE'])
