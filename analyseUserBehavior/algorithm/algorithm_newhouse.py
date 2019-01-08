@@ -58,7 +58,6 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = pd.to_numeric(df['CHANNEL'], errors='coerce')
         df['CONTEXT'] = pd.to_numeric(df['CONTEXT'], errors='coerce')
-        df["CONTEXT"] = df["CONTEXT"].astype("int64")
         df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d', errors='coerce')
         df = df.dropna(subset=['DATA_DATE'])
         df['START_TIME'] = pd.to_datetime(df['START_TIME'], errors='coerce')
@@ -76,7 +75,7 @@ def get_newhousemodel_data(file_path=file_newhousemodel_path):
         print(path)
         colName = ['PIC_ID', 'PIC_PRJID', 'PIC_PRJNAME', 'PIC_TYPE', 'PIC_DESC', 'PIC_TING', 'PIC_WEI', 'PIC_CHU',
                    'PIC_AREA', 'PIC_SELL_POINT', 'PIC_HX_TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, header=None, dtype={'PIC_ID': object})
+        df = pd.read_csv(file_path + path, names=colName, header=None)
         return df
 
 
@@ -85,7 +84,7 @@ def get_newhouseroom_data(file_path=file_newhouseroom_path):
     for path in paths:
         print(path)
         colName = ['ROOM_ID', 'FLATS', 'PRICE', 'TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, header=None, dtype={'room_id': object})
+        df = pd.read_csv(file_path + path, names=colName, header=None)
         return df
 
 
@@ -131,6 +130,8 @@ def begin():
 if __name__ == '__main__':
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
-    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog)
+    df_newhousemodel = get_newhousemodel_data()
+    df_newhouseroom = get_newhouseroom_data()
+    df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
-    redis_action(df_preparation)
+    # redis_action(df_preparation)
