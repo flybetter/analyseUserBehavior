@@ -1,0 +1,40 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select DEVICE_ID, LOGIN_ACCOUNT as PHONE from DWB_DA_APP_STATISTICS where DATA_DATE='20180921' and LOGIN_ACCOUNT is not null union select DEVICEID as DEVICE_ID , PHONE from dwb_mobile_user_new     where PHONE != ' 'and PHONE is not null and (TO_CHAR(CREATETIME, 'YYYYMMDD')='20180921' or TO_CHAR(UPDATETIME)='20180921') "
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/phoneDevice/",
+            "fileName": "phoneDevice.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss"
+          }
+        }
+      }
+    ]
+  }
+}

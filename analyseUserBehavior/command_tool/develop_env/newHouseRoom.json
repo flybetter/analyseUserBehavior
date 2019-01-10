@@ -1,0 +1,40 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select id,flats,price,totalprice from DWB_YFYJ_ROOM"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/newHouseRoom/",
+            "fileName": "newHouseRoom.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss"
+          }
+        }
+      }
+    ]
+  }
+}
