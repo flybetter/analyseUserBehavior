@@ -15,7 +15,7 @@ def get_phonedevice_data():
     for path in paths:
         columns = ["DEVICE", "PHONE"]
         df = pd.read_csv(file_path + path, names=columns, header=None,
-                         index_col=False)
+                         index_col=False, low_memory=False)
         df.drop_duplicates(inplace=True)
         return df
 

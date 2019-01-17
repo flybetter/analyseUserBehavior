@@ -10,6 +10,6 @@ if __name__ == '__main__':
     REDIS_DB = get_config('REDIS_DB')
     redis = Redis(host=REDIS_HOST, db=REDIS_DB)
     for path in paths:
-        df = pd.read_csv(path, names=['PHONE', 'DEVICE_ID'], )
+        df = pd.read_csv(path, names=['PHONE', 'DEVICE_ID'], low_memory=False)
         for name, grouped in df.groupby(['PHONE']):
             print('')

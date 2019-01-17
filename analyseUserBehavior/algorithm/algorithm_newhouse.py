@@ -41,7 +41,7 @@ def get_newhouse_data(file_path=file_newhouse_path):
         colName = ["PRJ_LISTID", "CHANNEL", "CITY", "CITY_NAME", "PRJ_ITEMNAME", "PRJ_LOC", "PRJ_DECORATE", "PRJ_VIEWS",
                    "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
         df = pd.read_csv(file_path + path, names=colName, header=None,
-                         dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64})
+                         dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64}, low_memory=False)
         print(df.head(100))
         return df
 
@@ -53,7 +53,7 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME", "CONTENT",
                    "OBJECT_ID"]
         df = pd.read_csv(file_path + path, names=colName, header=None,
-                         dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, na_values="null")
+                         dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, low_memory=False)
 
         df["CHANNEL"], df["CONTEXT"] = df["CONTEXT_ID"].str.split('-', 1).str
         df["CHANNEL"] = pd.to_numeric(df['CHANNEL'], errors='coerce')
@@ -75,7 +75,7 @@ def get_newhousemodel_data(file_path=file_newhousemodel_path):
         print(path)
         colName = ['PIC_ID', 'PIC_PRJID', 'PIC_PRJNAME', 'PIC_TYPE', 'PIC_DESC', 'PIC_TING', 'PIC_WEI', 'PIC_CHU',
                    'PIC_AREA', 'PIC_SELL_POINT', 'PIC_HX_TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, header=None)
+        df = pd.read_csv(file_path + path, names=colName, low_memory=False, dtype={'PIC_ID': object})
         return df
 
 
@@ -84,7 +84,7 @@ def get_newhouseroom_data(file_path=file_newhouseroom_path):
     for path in paths:
         print(path)
         colName = ['ROOM_ID', 'FLATS', 'PRICE', 'TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, header=None)
+        df = pd.read_csv(file_path + path, names=colName, low_memory=False)
         return df
 
 
