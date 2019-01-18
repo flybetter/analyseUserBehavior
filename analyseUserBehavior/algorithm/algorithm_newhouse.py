@@ -19,7 +19,7 @@ redis_db = get_config("REDIS_DB")
 def custom(df):
     try:
         object = json.loads(df['CONTENT'])
-        df['ROOMID'] = object.get('roomid', np.NaN)
+        df['ROOMID'] = object.get('roomId', np.NaN)
         df['PROJECTTYPE'] = object.get('projectType', np.NaN)
         df['MODELID'] = object.get('modelId', np.NaN)
         df['PROJECTID'] = object.get('projectId', np.NaN)
@@ -84,7 +84,7 @@ def get_newhouseroom_data(file_path=file_newhouseroom_path):
     for path in paths:
         print(path)
         colName = ['ROOM_ID', 'FLATS', 'PRICE', 'TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, low_memory=False)
+        df = pd.read_csv(file_path + path, names=colName, low_memory=False,dtype={'ROOM_ID': object})
         return df
 
 
