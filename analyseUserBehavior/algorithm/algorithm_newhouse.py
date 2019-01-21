@@ -65,7 +65,7 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         df['END_TIME'] = pd.to_datetime(df['END_TIME'], errors='coerce')
         df = df.dropna(subset=['END_TIME'])
         df = df.apply(custom, axis=1)
-        print(df.head(100))
+        print(df[df['LOGIN_ACCOUNT'] == '18118849310'])
         return df
 
 
@@ -84,7 +84,7 @@ def get_newhouseroom_data(file_path=file_newhouseroom_path):
     for path in paths:
         print(path)
         colName = ['ROOM_ID', 'FLATS', 'PRICE', 'TOTALPRICE']
-        df = pd.read_csv(file_path + path, names=colName, low_memory=False,dtype={'ROOM_ID': object})
+        df = pd.read_csv(file_path + path, names=colName, low_memory=False, dtype={'ROOM_ID': object})
         return df
 
 
