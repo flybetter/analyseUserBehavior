@@ -1,6 +1,6 @@
 import pandas as pd
 import redis
-from analyseUserBehavior.algorithm.algorithm_newhouse import REDIS_HOST
+from analyseUserBehavior.algorithm.algorithm_newHouse import REDIS_HOST
 import re
 
 

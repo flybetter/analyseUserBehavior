@@ -16,7 +16,7 @@
             "connection": [
               {
                 "querySql": [
-                  "select DEVICE_ID,CONTEXT_ID,CITY,DATA_DATE,LOGIN_ACCOUNT,START_TIME,END_TIME,CONTENT,OBJECT_ID from DWB_DA_APP_STATISTICS where DATA_DATE between '20190107' and '20190107' and PAGE_ID in('com.house365.newhouse.ui.secondsell.SecondSellDetailActivity','SecondHouseListViewController_HouseSell','com.house365.newhouse.ui.secondsell.NewSecondSellResultActivity','SecondHouseDetailViewController','SecondHouseDetailViewController_HouseSell')"
+                  "select pr.PRJ_LISTID,ch.CHANNEL,ch.CITY,city.CITY_NAME,pr.PRJ_ITEMNAME,pr.PRJ_LOC,pr.PRJ_DECORATE,pr.PRJ_VIEWS,pr.B_LNG,pr.B_LAT,ch.price_avg,ch.price_show from DWB_WEB_PROJECT pr  join dwb_web_w_channel ch on pr.PRJ_ID=ch.PRJ_ID  join DWD_REC_CITY city on city.CITY_ID =pr.PRJ_CITY where  pr.PRJ_DISP=1 and pr.B_LNG !=0 and pr.B_LNG is not null "
                 ],
                 "jdbcUrl": [
                   "jdbc:oracle:thin:@172.17.1.195:1521:app"
@@ -28,8 +28,8 @@
         "writer": {
           "name": "txtfilewriter",
           "parameter": {
-            "path": "/home/michael/datax_data/secondHouseLog/",
-            "fileName": "secondHouseLog.csv",
+            "path": "/home/michael/datax_data/secondHouse/",
+            "fileName": "secondHouse.csv",
             "writeMode": "truncate",
             "dateFormat": "yyyy-MM-dd hh:mm:ss.sss",
             "fileFormat": "csv"
