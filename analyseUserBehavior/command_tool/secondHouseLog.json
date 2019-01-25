@@ -1,0 +1,41 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select DEVICE_ID,CONTEXT_ID,CITY,DATA_DATE,LOGIN_ACCOUNT,START_TIME,END_TIME,CONTENT,OBJECT_ID from DWB_DA_APP_STATISTICS where DATA_DATE between '20190107' and '20190107' and ( ( PAGE_ID in('HouseDetailViewController','com.house365.newhouse.ui.newhome.NewHouseDetailActivity','com.house365.newhouse.ui.newhome.NewHouseDetailActivity$14','NewHouseDetailViewController','com.house365.newhouse.ui.newhome.NewHouseRefectorActivity','newhouse_detail', 'HouseDetailRoomTypeDetailViewController','NewHouseLoudongDetailViewController','com.house365.newhouse.ui.newhome.LouDongHouseDetailActivity','com.house365.newhouse.ui.newhome.FlatsDetailActivity') and CONTEXT_ID like '_-%') or (OBJECT_ID in ('zxlb-qysx', 'zxlb-jgsx', 'zxlb-hxsx', 'dtzf-lplb', 'xfdtzf-sxan', 'xflb-sxan')))"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@172.17.1.195:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/newHouseLog/",
+            "fileName": "newHouseLog.csv",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss",
+            "fileFormat": "csv"
+          }
+        }
+      }
+    ]
+  }
+}
