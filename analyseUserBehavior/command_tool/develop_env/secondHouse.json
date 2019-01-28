@@ -1,0 +1,41 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select ID, ESTA, DISTRICT, ADDRESS, STREETID, BLOCKID, ISREAL, BLOCKSHOWNAME, MRIGHT, PURPOSE, STRUCTURE, BUILDTYPE, BUILDYEAR, BUILDAREA, GARDENAREA, SUBFLOOR, FLOOR, TOTALFLOOR, ROOM, HALL, TOILET, KITCHEN, BALCONY, FORWARD, PRICE, AVERPRICE, PRICETERM, PRICETYPE, BASESERVICE, EQUIPMENT, ENVIRONMENT, TRAFFIC, FITMENT, SERVERCO, CONTACTOR, TELNO, MOBILE, PIC1, CREATTIME, UPDATETIME, EXPIRETIME from dwb_ras_sell_nj_all "
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/secondHouse/",
+            "fileName": "secondHouse.csv",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss",
+            "fileFormat": "csv"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -42,7 +42,6 @@ def get_newhouse_data(file_path=file_newhouse_path):
                    "B_LNG", "B_LAT", "PRICE_AVG", "PRICE_SHOW"]
         df = pd.read_csv(file_path + path, names=colName, header=None,
                          dtype={'B_LNG': np.str, 'B_LAT': np.str, 'PRJ_LISTID': np.int64}, low_memory=False)
-        print(df.head(100))
         return df
 
 
@@ -65,7 +64,6 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         df['END_TIME'] = pd.to_datetime(df['END_TIME'], errors='coerce')
         df = df.dropna(subset=['END_TIME'])
         df = df.apply(custom, axis=1)
-        print(df[df['LOGIN_ACCOUNT'] == '18118849310'])
         return df
 
 
