@@ -6,7 +6,8 @@ import pytz
 # FILES = ["newHouse.json", "newHouseLog.json", "phoneDevice.json"]
 # newHouse.json is a full scale
 FILES = ["/app/datax/bin/newHouseLog.json",
-         "/app/datax/bin/phoneDevice.json"]
+         "/app/datax/bin/phoneDevice.json",
+         "/app/datax/bin/secondHouseLog.json"]
 
 
 def format_json(date, file):

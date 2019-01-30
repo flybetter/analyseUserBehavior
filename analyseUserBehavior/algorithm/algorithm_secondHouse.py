@@ -42,7 +42,8 @@ def get_secondhouse_data(file_path=file_secondhouse_path):
     paths = os.listdir(file_path)
     for path in paths:
         print(file_path)
-        colName = ["ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "ISREAL", "BLOCKSHOWNAME", "MRIGHT",
+        colName = ["SECONDHOUSE_ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "ISREAL", "BLOCKSHOWNAME",
+                   "MRIGHT",
                    "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "GARDENAREA", "SUBFLOOR", "FLOOR",
                    "TOTALFLOOR", "ROOM", "HALL", "TOILET", "KITCHEN", "BALCONY", "FORWARD", "PRICE", "AVERPRICE",
                    "PRICETERM", "PRICETYPE", "BASESERVICE", "EQUIPMENT", "ENVIRONMENT", "TRAFFIC", "FITMENT",
@@ -56,7 +57,7 @@ def get_block_data(file_path=file_block_path):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
-        colName = ["CITY_NAME", "ID", "BLOCKNAME", "DISTRICT", "STREETID", "AREA", "ADDRESS", "BUS", "AVERPRICE",
+        colName = ["CITY_NAME", "BLOCK_ID", "BLOCKNAME", "DISTRICT", "STREETID", "AREA", "ADDRESS", "BUS", "AVERPRICE",
                    "UPDATEPRICE", "FORUMID", "NEWHOUSEID", "B_MAP_X", "B_MAP_Y", "ACCURACY", "MAP_TEST",
                    "B_PROPERTY_TYPE", "B_GREEN", "B_PARKING", "B_DEVELOPERS", "B_PROPERTY_COMPANY", "B_PROPERTY_FEES",
                    "B_BUS", "B_METRO", "B_NUM", "BI_S", "BI_SPELL", "SUBWAY", "SITENAME", "SUBWAYRANGE", "APP", "ESTA",
@@ -68,9 +69,9 @@ def get_block_data(file_path=file_block_path):
 
 def merge_secondhouse(df_secondhouse, df_secondhouselog, df_block):
     df = pd.merge(left=df_secondhouselog, right=df_secondhouse, how="left",
-                  left_on=['CITY', 'CHANNEL', 'CONTEXT'],
-                  right_on=['CITY_NAME', 'CHANNEL', 'PRJ_LISTID'])
-    df = df.merge(df_block, left_on='MODELID', right_on='PIC_ID', how='left')
+                  left_on='CONTEXT',
+                  right_on='SECONDHOUSE_ID')
+    df = df.merge(df_block, left_on=['CITY', 'BLOCKID'], right_on=['CITY_NAME', 'BLOCK_ID'], how='left')
     return df
 
 
@@ -109,4 +110,4 @@ if __name__ == '__main__':
     df_block = get_block_data()
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
-    redis_action(df_preparation)
+    # redis_action(df_preparation)
