@@ -41,7 +41,7 @@ def get_secondhouselog_data(file_path=file_secondhouselog_path):
 def get_secondhouse_data(file_path=file_secondhouse_path):
     paths = os.listdir(file_path)
     for path in paths:
-        print(file_path)
+        print(path)
         colName = ["SECONDHOUSE_ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "ISREAL", "BLOCKSHOWNAME",
                    "MRIGHT",
                    "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "GARDENAREA", "SUBFLOOR", "FLOOR",
@@ -49,7 +49,7 @@ def get_secondhouse_data(file_path=file_secondhouse_path):
                    "PRICETERM", "PRICETYPE", "BASESERVICE", "EQUIPMENT", "ENVIRONMENT", "TRAFFIC", "FITMENT",
                    "SERVERCO", "CONTACTOR", "TELNO", "MOBILE", "PIC1", "CREATTIME", "UPDATETIME", "EXPIRETIME"]
         df = pd.read_csv(file_path + path, names=colName,
-                         low_memory=False)
+                         low_memory=False, dtype={'SECONDHOUSE_ID': object, 'BLOCKID': object})
         return df
 
 
@@ -110,4 +110,5 @@ if __name__ == '__main__':
     df_block = get_block_data()
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
+    print(df_preparation.head(100))
     # redis_action(df_preparation)
