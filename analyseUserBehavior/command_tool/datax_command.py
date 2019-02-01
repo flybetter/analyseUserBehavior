@@ -6,7 +6,10 @@ COMMANDS = [
     "python /app/datax/bin/datax.py /app/datax/bin/newHouse.json",
     "python /app/datax/bin/datax.py /app/datax/bin/phoneDevice.json",
     "python /app/datax/bin/datax.py /app/datax/bin/newHouseRoom.json",
-    "python /app/datax/bin/datax.py /app/datax/bin/newHouseModel.json"]
+    "python /app/datax/bin/datax.py /app/datax/bin/newHouseModel.json",
+    "python /app/datax/bin/datax.py /app/datax/bin/block.json",
+    "python /app/datax/bin/datax.py /app/datax/bin/secondHouse.json",
+    "python /app/datax/bin/datax.py /app/datax/bin/secondHouseLog.jsonn"]
 
 
 def action(command):
