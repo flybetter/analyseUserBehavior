@@ -6,7 +6,7 @@ import pandas as pd
 读取配置文件信息
 """
 ## 用来控制环境参数
-ENV = 'develop'
+ENV = 'production'
 
 
 def get_config(name):

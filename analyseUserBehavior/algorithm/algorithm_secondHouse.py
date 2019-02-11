@@ -63,7 +63,7 @@ def get_block_data(file_path=file_block_path):
                    "B_BUS", "B_METRO", "B_NUM", "BI_S", "BI_SPELL", "SUBWAY", "SITENAME", "SUBWAYRANGE", "APP", "ESTA",
                    "PROPERTY_FEES", "NOFEE", "PLOT_RATIO", "TOTAL_ROOM", "TURN_TIME", "B_AREA", "FEATURE"]
         df = pd.read_csv(file_path + path, names=colName, low_memory=False,
-                         dtype={'ID': object, 'B_MAP_X': np.str, 'B_MAP_Y': np.str})
+                         dtype={'ID': object, 'B_MAP_X': np.str, 'B_MAP_Y': np.str, 'BLOCK_ID': object})
         return df
 
 
