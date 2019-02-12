@@ -16,7 +16,7 @@
             "connection": [
               {
                 "querySql": [
-                  "select * from DWF_RAS_BLOCK"
+                  "select CITY_NAME, ID, BLOCKNAME, DISTRICT, STREETID, AREA, ADDRESS, BUS, AVERPRICE, UPDATEPRICE, FORUMID, NEWHOUSEID, B_MAP_X, B_MAP_Y, ACCURACY, MAP_TEST, B_PROPERTY_TYPE, B_GREEN, B_PARKING, B_DEVELOPERS, B_PROPERTY_COMPANY, B_PROPERTY_FEES, B_BUS, B_METRO, B_NUM, BI_S, BI_SPELL, SUBWAY, SITENAME, SUBWAYRANGE, APP, ESTA, PROPERTY_FEES, NOFEE, PLOT_RATIO, TOTAL_ROOM, TURN_TIME, B_AREA, FEATURE from DWF_RAS_BLOCK where B_MAP_X >0 and B_MAP_Y>0"
                 ],
                 "jdbcUrl": [
                   "jdbc:oracle:thin:@172.17.1.195:1521:app"

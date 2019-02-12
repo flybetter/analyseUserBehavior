@@ -16,7 +16,7 @@
             "connection": [
               {
                 "querySql": [
-                  "select DEVICE_ID,CONTEXT_ID,CITY,DATA_DATE,LOGIN_ACCOUNT,START_TIME,END_TIME,CONTENT,OBJECT_ID from DWB_DA_APP_STATISTICS where DATA_DATE between '20190107' and '20190107' and PAGE_ID in('com.house365.newhouse.ui.secondsell.SecondSellDetailActivity','SecondHouseListViewController_HouseSell','com.house365.newhouse.ui.secondsell.NewSecondSellResultActivity','SecondHouseDetailViewController','SecondHouseDetailViewController_HouseSell')"
+                  "select DEVICE_ID,CONTEXT_ID,CITY,DATA_DATE,LOGIN_ACCOUNT,START_TIME,END_TIME,CONTENT,OBJECT_ID from DWB_DA_APP_STATISTICS where DATA_DATE between '20190107' and '20190107' and PAGE_ID in('com.house365.newhouse.ui.secondsell.SecondSellDetailActivity','SecondHouseListViewController_HouseSell','com.house365.newhouse.ui.secondsell.NewSecondSellResultActivity','SecondHouseDetailViewController','SecondHouseDetailViewController_HouseSell') and CONTEXT_ID is not null"
                 ],
                 "jdbcUrl": [
                   "jdbc:oracle:thin:@172.17.1.195:1521:app"
