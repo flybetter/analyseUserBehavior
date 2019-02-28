@@ -1,19 +1,4 @@
-# coding=UTF-8
-import pandas as pd
-import numpy as np
-import redis
-import os
-import json
-from ..config.gobal_config import get_config
-
-file_newhouse_path = get_config('FILE_NEWHOUSE_PATH')
-file_newhouselog_path = get_config('FILE_NEWHOUSELOG_PATH')
-file_newhouseroom_path = get_config('FILE_NEWHOUSEROOM_PATH')
-file_newhousemodel_path = get_config('FILE_NEWHOUSEMODEL_PATH')
-redis_host = get_config('REDIS_HOST')
-remain_days = get_config('REMAIN_DAYS')
-redis_newhouse_prefix = get_config('REDIS_NEWHOUSE_PREFIX')
-redis_db = get_config("REDIS_DB")
+from analyseUserBehavior.algorithm import *
 
 
 def custom(df):
@@ -34,7 +19,7 @@ def custom(df):
         return df
 
 
-def get_newhouse_data(file_path=file_newhouse_path):
+def get_newhouse_data(file_path=FILE_NEWHOUSE_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(file_path)
@@ -45,7 +30,7 @@ def get_newhouse_data(file_path=file_newhouse_path):
         return df
 
 
-def get_newhouselog_data(file_path=file_newhouselog_path):
+def get_newhouselog_data(file_path=FILE_NEWHOUSELOG_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -67,7 +52,7 @@ def get_newhouselog_data(file_path=file_newhouselog_path):
         return df
 
 
-def get_newhousemodel_data(file_path=file_newhousemodel_path):
+def get_newhousemodel_data(file_path=FILE_NEWHOUSEMODEL_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -77,7 +62,7 @@ def get_newhousemodel_data(file_path=file_newhousemodel_path):
         return df
 
 
-def get_newhouseroom_data(file_path=file_newhouseroom_path):
+def get_newhouseroom_data(file_path=FILE_NEWHOUSEROOM_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -104,14 +89,14 @@ def redis_action(df):
     for device_id, data in df.groupby("DEVICE_ID"):
         for date, values in data.groupby("DATA_DATE"):
             print(values.to_json(orient="records", force_ascii=False))
-            redis_push(redis_newhouse_prefix + device_id, values.to_json(orient="records", force_ascii=False))
+            redis_push(REDIS_NEWHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 
 
 def redis_push(name, value):
-    r = redis.Redis(host=redis_host, port=6379, db=redis_db)
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=REDIS_DB)
     r.lpush(name, value)
     num = r.llen(name)
-    if num > int(remain_days):
+    if num > int(REMAIN_DAYS):
         r.rpop(name)
 
 

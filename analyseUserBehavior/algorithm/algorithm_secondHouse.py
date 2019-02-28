@@ -1,18 +1,4 @@
-# coding=UTF-8
-import pandas as pd
-import numpy as np
-import redis
-import os
-import json
-from ..config.gobal_config import get_config
-
-file_secondhouse_path = get_config('FILE_SECONDHOUSE_PATH')
-file_secondhouselog_path = get_config('FILE_SECONDHOUSELOG_PATH')
-file_block_path = get_config('FILE_BLOCK_PATH')
-redis_host = get_config('REDIS_HOST')
-remain_days = get_config('REMAIN_DAYS')
-redis_secondhouse_prefix = get_config('REDIS_SECONDHOUSE_PREFIX')
-redis_db = get_config("REDIS_DB")
+from analyseUserBehavior.algorithm import *
 
 
 def custom(df):
@@ -20,7 +6,7 @@ def custom(df):
     return df
 
 
-def get_secondhouselog_data(file_path=file_secondhouselog_path):
+def get_secondhouselog_data(file_path=FILE_SECONDHOUSELOG_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -38,7 +24,7 @@ def get_secondhouselog_data(file_path=file_secondhouselog_path):
         return df
 
 
-def get_secondhouse_data(file_path=file_secondhouse_path):
+def get_secondhouse_data(file_path=FILE_SECONDHOUSE_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -53,7 +39,7 @@ def get_secondhouse_data(file_path=file_secondhouse_path):
         return df
 
 
-def get_block_data(file_path=file_block_path):
+def get_block_data(file_path=FILE_BLOCK_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
@@ -84,14 +70,14 @@ def redis_action(df):
     for device_id, data in df.groupby("DEVICE_ID"):
         for date, values in data.groupby("DATA_DATE"):
             print(values.to_json(orient="records", force_ascii=False))
-            redis_push(redis_secondhouse_prefix + device_id, values.to_json(orient="records", force_ascii=False))
+            redis_push(REDIS_SECONDHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 
 
 def redis_push(name, value):
-    r = redis.Redis(host=redis_host, port=6379, db=redis_db)
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=REDIS_DB)
     r.lpush(name, value)
     num = r.llen(name)
-    if num > int(remain_days):
+    if num > int(REMAIN_DAYS):
         r.rpop(name)
 
 

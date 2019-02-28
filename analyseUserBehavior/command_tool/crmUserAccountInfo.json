@@ -1,0 +1,40 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select id,idcard,phone from DWB_USER_ACCOUNT_INFO where idcard is not null"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@172.17.1.195:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/crmUser/",
+            "fileName": "crmUser.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss"
+          }
+        }
+      }
+    ]
+  }
+}
