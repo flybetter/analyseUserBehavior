@@ -1,4 +1,5 @@
-from analyseUserBehavior.algorithm import algorithm_newHouse, algorithm_phoneDevice,algorithm_secondHouse
+from analyseUserBehavior.algorithm import algorithm_newHouse, algorithm_phoneDevice, algorithm_secondHouse, \
+    algorithm_crm_profile
 from analyseUserBehavior.command_tool import create_json, datax_command
 from apscheduler.schedulers.blocking import BlockingScheduler
 import pytz
@@ -12,11 +13,13 @@ def begin():
     print("datax finished")
     algorithm_newHouse.begin()
     print("algorithm_newhouse  synchronous finished ")
-    algorithm_secondHouse.begin()
-    print("algorithm_secondHouse synchronous finished")
+    # TODO 暂时先放弃
+    # algorithm_secondHouse.begin()
+    # print("algorithm_secondHouse synchronous finished")
     algorithm_phoneDevice.begin()
     print("algorithm_phoneDevice synchronous finished")
-
+    algorithm_crm_profile.begin()
+    print("algorithm_crm_profile synchronous finished")
 
 
 def begin2():

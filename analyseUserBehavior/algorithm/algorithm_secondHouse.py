@@ -97,4 +97,4 @@ if __name__ == '__main__':
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
     print(df_preparation.head(100))
-    # redis_action(df_preparation)
+    # redis_action(df_preparation)c

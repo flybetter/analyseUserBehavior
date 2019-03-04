@@ -8,6 +8,9 @@ def get_phonedevice_data():
         df = pd.read_csv(FILE_PHONEDEVICE_PATH + path, names=columns, header=None,
                          index_col=False, low_memory=False)
         df.drop_duplicates(inplace=True)
+        # TODO 过滤
+        # TODO not test yet
+        df = df[df['PHONE'].str.startswith('1', na=False)]
         return df
 
 

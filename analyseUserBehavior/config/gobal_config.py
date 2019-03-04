@@ -6,7 +6,7 @@ import pandas as pd
 读取配置文件信息
 """
 ## 用来控制环境参数
-ENV = 'production'
+ENV = 'develop'
 
 
 def get_config(name):
@@ -19,4 +19,3 @@ def get_config(name):
 if __name__ == '__main__':
     value = get_config('REDIS_HOST')
     print(value)
-

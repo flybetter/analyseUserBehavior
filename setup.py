@@ -10,7 +10,7 @@ setup(
         'chardet==3.0.4',
         'cycler==0.10.0',
         'docopt==0.6.2',
-        'hdfs==2.1.0',
+        # 'hdfs==2.1.0',
         'idna==2.7',
         'kiwisolver==1.0.1',
         # 'matplotlib==2.2.3',
@@ -21,12 +21,12 @@ setup(
         'python-dateutil==2.7.3',
         'pytz==2018.5',
         'redis==2.10.6',
-        'requests==2.19.1',
+        # 'requests==2.19.1',
         # 'scikit-learn==0.19.2',
-        'simplejson==3.16.0',
+        # 'simplejson==3.16.0',
         'six==1.11.0',
         # 'sklearn==0.0',
         'tzlocal==1.5.1',
-        'urllib3==1.23'
+        # 'urllib3==1.23'
     ]
 )
