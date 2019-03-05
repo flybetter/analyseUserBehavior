@@ -22,6 +22,7 @@ def begin():
     print("algorithm_crm_profile synchronous finished")
 
 
+
 def begin2():
     print("test")
 

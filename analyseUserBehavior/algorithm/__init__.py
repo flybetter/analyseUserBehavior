@@ -5,6 +5,8 @@ import os
 import json
 from analyseUserBehavior.config.gobal_config import get_config
 import re
+import traceback
+import math
 
 REDIS_HOST = get_config('REDIS_HOST')
 REDIS_DB = get_config("REDIS_DB")
