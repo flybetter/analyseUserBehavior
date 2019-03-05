@@ -27,11 +27,11 @@ class CrmProfile:
         pool = redis.ConnectionPool(host=redis_host, db=redis_db)
         self.offical_r = redis.Redis(connection_pool=pool)
 
-        self.crm_profile = dict()
+        self.crm_profile_dict = dict()
 
     def begin(self):
-        # df = self.get_crm_profile_data()
-        df = self.get_custom_crm_profile_data()
+        df = self.get_crm_profile_data()
+        # df = self.get_custom_crm_profile_data()
         for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
@@ -49,7 +49,7 @@ class CrmProfile:
                     data.extend(json.loads(json_data.decode('utf-8')))
         if len(data) > 0:
             result = self.crm_profile_action(data, result)
-            self.crm_profile[phone] = json.dumps(result, ensure_ascii=False)
+            self.redis_save(phone, result)
 
     @operator_status
     def crm_profile_action(self, data, result):
@@ -108,7 +108,7 @@ class CrmProfile:
 
     def redis_pipline_save(self):
         pool = self.crm_r.pipeline()
-        pool.mset(self.crm_profile)
+        pool.mset(self.crm_profile_dict)
         pool.execute()
 
 
