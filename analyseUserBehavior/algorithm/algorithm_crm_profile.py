@@ -1,7 +1,9 @@
 from analyseUserBehavior.algorithm import *
+import multiprocessing as mp
+from datetime import datetime
 
 
-class CrmProfile():
+class CrmProfile:
     def __init__(self, redis_host=REDIS_HOST, redis_crm_db=REDIS_CRM_DB, redis_db=REDIS_DB):
         crm_pool = redis.ConnectionPool(host=redis_host, db=redis_crm_db)
         self.crm_r = redis.Redis(connection_pool=crm_pool)
@@ -9,14 +11,25 @@ class CrmProfile():
         pool = redis.ConnectionPool(host=redis_host, db=redis_db)
         self.offical_r = redis.Redis(connection_pool=pool)
 
+        self.crm_profile_dict = dict()
+
     def begin(self):
-        df = self.get_custom_crm_profile_data()
+        df = self.get_crm_profile_data()
+        # pool = mp.Pool(processes=10)
         for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
                 phone = re_data.group(1)
                 result = self.get_crm_profile_detail(phone, df)
-                self.get_crm_house_data(phone, result)
+                temp_result=self.get_crm_house_data(phone, result)
+                if len(temp_result)>0:
+                    self.crm_profile_dict[phone]=temp_result
+                # self.crm_profile_dict.extend(temp_result)
+        self.redis_pipline_save()
+
+    def subprocess_fun(self, phone, df):
+        result = self.get_crm_profile_detail(phone, df)
+        self.get_crm_house_data(phone, result)
 
     def get_crm_house_data(self, phone, result):
         data = list()
@@ -27,7 +40,9 @@ class CrmProfile():
                     data.extend(json.loads(json_data.decode('utf-8')))
         if len(data) > 0:
             result = self.crm_profile_action(data, result)
-            self.redis_save(phone, result)
+            return result
+        else:
+            return data
 
     def crm_profile_action(self, data, result):
         result_json = json.dumps(data, ensure_ascii=False)
@@ -45,7 +60,7 @@ class CrmProfile():
         result['bedroom'] = df['PIC_TYPE'].mean()
         result['kitchen'] = df['PIC_CHU'].mean()
         if len(df) > 0:
-            result['top_name'] = df['PRJ_ITEMNAME'].value_counts().index[0]
+            result['top_item_name'] = df['PRJ_ITEMNAME'].value_counts().index[0]
         return result
 
     def get_crm_profile_data(self):
@@ -68,8 +83,8 @@ class CrmProfile():
         result = dict()
         df_result = df[df['PHONE'].astype(str).str.contains(phone)]
         if len(df_result) > 0:
-            result['USERID'] = df_result['ID']
-            result['IDCARD'] = df_result['IDCARD']
+            result['userId'] = df_result['ID']
+            result['idCard'] = df_result['IDCARD']
         return result
 
     def redis_save(self, phone, result):
@@ -79,9 +94,11 @@ class CrmProfile():
 
     def redis_pipline_save(self):
         # TODO mset
-        pool = self.crm_r.pipeline()
-        pool.mset(self.crm_profile_dict)
-        pool.execute()
+        # pool = self.crm_r.pipeline()
+        # pool.mset(self.crm_profile_dict)
+        # pool.execute()
+        for i in self.crm_profile_dict:
+            print(i)
 
 
 def begin():
@@ -90,5 +107,9 @@ def begin():
 
 
 if __name__ == '__main__':
+    start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("start time :" + start_time)
     crm_profile = CrmProfile()
     crm_profile.begin()
+    end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("end time:" + end_time + " cost time:" + (end_time - start_time).seconds)
