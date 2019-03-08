@@ -54,10 +54,11 @@ class CrmProfile:
                     data.extend(json.loads(json_data.decode('utf-8')))
         if len(data) > 0:
             result_json = json.dumps(data, ensure_ascii=False)
-            df = pd.read_json(result_json, orient='records', dtype={'PRJ_ITEMNAME': np.str})
+            df = pd.read_json(result_json, orient='records', dtype={'PRJ_ITEMNAME': np.str}).dropna(
+                subset=['B_LAT', 'B_LNG', 'PRJ_ITEMNAME'])
             cities = dict()
             for key, value in df.groupby('CITY_NAME'):
-                cities[key] = self.crm_profile_action(df, result)
+                cities[key] = self.crm_profile_action(value, result)
             return cities
         else:
             return data
@@ -119,9 +120,6 @@ class CrmProfile:
             for (k, v) in self.crm_profile_dict.items():
                 pipe.hmset(k, v)
             pipe.execute()
-
-        # for (k, v) in self.crm_profile_dict.items():
-        #     print(k, json.dumps(v, ensure_ascii=False))
 
 
 def begin():
