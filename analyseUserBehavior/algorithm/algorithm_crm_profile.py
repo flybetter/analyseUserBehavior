@@ -22,8 +22,9 @@ def operator_status(func):
 
 
 class CrmProfile:
-    def __init__(self, redis_host=REDIS_HOST, redis_crm_db=REDIS_CRM_DB, redis_db=REDIS_DB):
-        crm_pool = redis.ConnectionPool(host=redis_host, db=redis_crm_db)
+    def __init__(self, redis_host=REDIS_HOST, redis_crm_host=REDIS_CRM_HOST, redis_crm_db=REDIS_CRM_DB,
+                 redis_db=REDIS_DB):
+        crm_pool = redis.ConnectionPool(host=redis_crm_host, db=redis_crm_db)
         self.crm_r = redis.Redis(connection_pool=crm_pool)
 
         pool = redis.ConnectionPool(host=redis_host, db=redis_db)
@@ -32,8 +33,8 @@ class CrmProfile:
         self.crm_profile_dict = dict()
 
     def begin(self):
-        df = self.get_crm_profile_data()
-        # pool = mp.Pool(processes=10)
+        # df = self.get_crm_profile_data()
+        df = self.get_custom_crm_profile_data()
         for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
@@ -78,13 +79,19 @@ class CrmProfile:
         result['bedroom'] = df['PIC_TYPE'].mean()
         result['kitchen'] = df['PIC_CHU'].mean()
         if len(df) > 0:
-            df = df.sort_values(by='START_TIME', ascending=False)
-            result['top_item_name'] = df['PRJ_ITEMNAME'].value_counts().index.get_values()[0]
+            df_result = df.sort_values(by='START_TIME', ascending=False)
+            df_count = df_result.groupby('CONTEXT_ID').size().reset_index(name='COUNT')
+            df_order = df_result.groupby('CONTEXT_ID').nth(0)
+            datas = df_order.merge(df_count, how='left', on='CONTEXT_ID')
+            datas.sort_values(by='COUNT', ascending=False, inplace=True)
+            # result['top_item_name'] = df['PRJ_ITEMNAME'].value_counts().index.get_values()[0]
+            result['top_item_name'] = datas.iloc[0, 31]
         else:
             result['top_item_name'] = np.NAN
         return result
 
-    def get_crm_profile_data(self):
+    @staticmethod
+    def get_crm_profile_data():
         paths = os.listdir(FILE_CRM_USER_PATH)
         for path in paths:
             columns = ["ID", "IDCARD", "PHONE"]
@@ -93,7 +100,8 @@ class CrmProfile:
             df.drop_duplicates(inplace=True)
             return df
 
-    def get_custom_crm_profile_data(self):
+    @staticmethod
+    def get_custom_crm_profile_data():
         columns = ["ID", "IDCARD", "PHONE"]
         df = pd.read_csv(r'/Users/michael/Downloads/crmUser.txt', names=columns, header=None,
                          index_col=False, low_memory=False)
