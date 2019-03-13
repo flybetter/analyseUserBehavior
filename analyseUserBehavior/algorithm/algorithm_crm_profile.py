@@ -33,8 +33,8 @@ class CrmProfile:
         self.crm_profile_dict = dict()
 
     def begin(self):
-        # df = self.get_crm_profile_data()
-        df = self.get_custom_crm_profile_data()
+        df = self.get_crm_profile_data()
+        # df = self.get_custom_crm_profile_data()
         for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
@@ -64,14 +64,24 @@ class CrmProfile:
         else:
             return data
 
+    @staticmethod
+    def get_sum_price(sum_price, area, avg_price):
+        if pd.notna(sum_price):
+            return re.sub(u'[\u4E00-\u9FA5]', '', str(sum_price))
+        elif pd.notna(area) and pd.notna(avg_price):
+            return area * avg_price / 10000
+        else:
+            return np.NAN
+
     @operator_status
     def crm_profile_action(self, df, result):
         fiter_df = df[df['PRICE_SHOW'].astype(str).str.contains('元/㎡', na=False)]
         result['avg_price'] = fiter_df['PRICE_AVG'].mean()
         result['area'] = df['PIC_AREA'].mean()
-        result['sum_price'] = pd.to_numeric(
-            df['PIC_HX_TOTALPRICE'].astype(str).map(lambda x: re.sub(u'[\u4E00-\u9FA5]', '', x)),
-            errors='coerce').mean()
+        df['PIC_HX_TOTALPRICE'] = df.apply(
+            lambda x: CrmProfile.get_sum_price(x['PIC_HX_TOTALPRICE'], x['PIC_AREA'],
+                                               x['PRICE_AVG']), axis=1)
+        result['sum_price'] = pd.to_numeric(df['PIC_HX_TOTALPRICE'], errors='coerce').mean()
         result['toliet'] = df['PIC_WEI'].mean()
         result['livingroom'] = df['PIC_TING'].mean()
         di = {8: 1, 9: 2, 10: 3, 11: 4, 21: 5, 22: 6}
