@@ -1,6 +1,7 @@
 from analyseUserBehavior.algorithm import *
 import multiprocessing as mp
 from datetime import datetime
+import copy
 
 
 def operator_status(func):
@@ -33,8 +34,8 @@ class CrmProfile:
         self.crm_profile_dict = dict()
 
     def begin(self):
-        # df = self.get_crm_profile_data()
-        df = self.get_custom_crm_profile_data()
+        df = self.get_crm_profile_data()
+        # df = self.get_custom_crm_profile_data()
         for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
@@ -59,7 +60,7 @@ class CrmProfile:
                 subset=['B_LAT', 'B_LNG', 'PRJ_ITEMNAME'])
             cities = dict()
             for key, value in df.groupby('CITY_NAME'):
-                cities[key] = self.crm_profile_action(value, result)
+                cities[key] = self.crm_profile_action(value, copy.deepcopy(result))
             return cities
         else:
             return data
@@ -134,6 +135,7 @@ class CrmProfile:
         self.crm_r.set(REDIS_CRM_PREFIX + phone, json.dumps(result, ensure_ascii=False))
 
     def redis_pipline_save(self):
+        print('redis_pipline_save')
         with self.crm_r.pipeline(transaction=False) as pipe:
             for (k, v) in self.crm_profile_dict.items():
                 pipe.hmset(k, v)
@@ -148,7 +150,6 @@ def begin():
 if __name__ == '__main__':
     start_time = datetime.now()
     print("start time :" + start_time.strftime('%Y-%m-%d %H:%M:%S'))
-    crm_profile = CrmProfile()
-    crm_profile.begin()
+    begin()
     end_time = datetime.now()
     print("end time:" + end_time.strftime('%Y-%m-%d %H:%M:%S') + " cost time:" + str((end_time - start_time).seconds))
