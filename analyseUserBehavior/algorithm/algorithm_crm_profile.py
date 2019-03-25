@@ -138,7 +138,7 @@ class CrmProfile:
         self.crm_r.set(REDIS_CRM_PREFIX + phone, json.dumps(result, ensure_ascii=False))
 
     def redis_pipline_save(self):
-        print('redis_pipline_save')
+        # print('redis_pipline_save')
         with self.crm_r.pipeline(transaction=False) as pipe:
             for (k, v) in self.crm_profile_dict.items():
                 pipe.hmset(k, v)
