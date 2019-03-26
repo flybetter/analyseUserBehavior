@@ -8,18 +8,21 @@ def get_phonedevice_data():
         df = pd.read_csv(FILE_PHONEDEVICE_PATH + path, names=columns, header=None,
                          index_col=False, low_memory=False)
         df.drop_duplicates(inplace=True)
-        # TODO 过滤
-        # TODO not test yet
         df = df[df['PHONE'].str.startswith('1', na=False)]
         return df
 
 
 def redis_action(df):
-    # print("redis_action")
-    r = redis.Redis(host=REDIS_HOST, port=6379, db=REDIS_DB)
-    for name, data in df.groupby("PHONE"):
-        for value in json.loads(data["DEVICE"].to_json(orient='split', index=False))['data']:
-            r.sadd(REDIS_PHONEDEVICE_PREFIX + str(name), value)
+    offical_pool = redis.ConnectionPool(host=REDIS_HOST, db=REDIS_DB)
+    offical_r = redis.Redis(connection_pool=offical_pool)
+    phone_devices = dict()
+    for phone, data in df.groupby("PHONE"):
+        phone_devices[REDIS_PHONEDEVICE_PREFIX+phone] = set(data['DEVICE'])
+
+    with offical_r.pipeline(transaction=False) as p:
+        for k, v in phone_devices.items():
+            p.sadd(k, *v)
+        p.execute()
 
 
 def begin():
