@@ -55,6 +55,7 @@ class CrmProfile:
                 for json_data in json_datas:
                     data.extend(json.loads(json_data.decode('utf-8')))
         if len(data) > 0:
+            # print("phone:" + phone)
             result_json = json.dumps(data, ensure_ascii=False)
             df = pd.read_json(result_json, orient='records', dtype={'PRJ_ITEMNAME': np.str}).dropna(
                 subset=['B_LAT', 'B_LNG', 'PRJ_ITEMNAME'])
@@ -62,6 +63,7 @@ class CrmProfile:
             for key, value in df.groupby('CITY_NAME'):
                 cities[key] = CrmProfile.custom_result(self.crm_profile_action(value, copy.deepcopy(result)))
             return cities
+            # print("cities:" + json.dumps(cities))
         else:
             return data
 

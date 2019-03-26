@@ -15,6 +15,7 @@ def get_phonedevice_data():
 
 
 def redis_action(df):
+    # print("redis_action")
     r = redis.Redis(host=REDIS_HOST, port=6379, db=REDIS_DB)
     for name, data in df.groupby("PHONE"):
         for value in json.loads(data["DEVICE"].to_json(orient='split', index=False))['data']:
