@@ -13,4 +13,5 @@ RUN python3 ./analyseUserBehavior/setup.py install
 #RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys  8B48AD6246925553 \
 #    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys  7638D0442B90D010
 #RUN apt-get update && apt-get install -y vim
+ENV active="production"
 CMD ["python3","-u","./analyseUserBehavior/startup.py"]

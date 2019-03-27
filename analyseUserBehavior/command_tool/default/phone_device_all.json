@@ -28,7 +28,7 @@
         "writer": {
           "name": "txtfilewriter",
           "parameter": {
-            "path": "/home/michael/datax_data/phone_device_all/",
+            "path": "/home/michael/datax_data/phoneDevice/",
             "fileName": "phone_device.csv",
             "writeMode": "truncate",
             "dateFormat": "yyyy-MM-dd hh:mm:ss.sss",

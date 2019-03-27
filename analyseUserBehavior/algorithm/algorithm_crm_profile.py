@@ -24,19 +24,22 @@ def operator_status(func):
 
 class CrmProfile:
     def __init__(self, redis_host=REDIS_HOST, redis_crm_host=REDIS_CRM_HOST, redis_crm_db=REDIS_CRM_DB,
-                 redis_db=REDIS_DB):
+                 redis_db=REDIS_DB, redis_phone_devices_db=REDIS_PHONE_DEVICES_DB):
         crm_pool = redis.ConnectionPool(host=redis_crm_host, db=redis_crm_db)
         self.crm_r = redis.Redis(connection_pool=crm_pool)
 
         pool = redis.ConnectionPool(host=redis_host, db=redis_db)
         self.offical_r = redis.Redis(connection_pool=pool)
 
+        devices_pool = redis.ConnectionPool(host=redis_host, db=redis_phone_devices_db)
+        self.devices_r = redis.Redis(connection_pool=devices_pool)
+
         self.crm_profile_dict = dict()
 
     def begin(self):
         df = self.get_crm_profile_data()
         # df = self.get_custom_crm_profile_data()
-        for key in self.offical_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
+        for key in self.devices_r.scan_iter(match=REDIS_PHONEDEVICE_PREFIX + '*', count=500):
             re_data = re.match(CRM_REGULAR, key.decode('utf-8'))
             if re_data:
                 phone = re_data.group(1)
@@ -49,7 +52,7 @@ class CrmProfile:
 
     def get_crm_house_data(self, phone, result):
         data = list()
-        for device in self.offical_r.smembers(REDIS_PHONEDEVICE_PREFIX + phone):
+        for device in self.devices_r.smembers(REDIS_PHONEDEVICE_PREFIX + phone):
             json_datas = self.offical_r.lrange(REDIS_NEWHOUSE_PREFIX + device.decode('utf-8'), 0, REMAIN_DAYS)
             if len(json_datas) > 0:
                 for json_data in json_datas:

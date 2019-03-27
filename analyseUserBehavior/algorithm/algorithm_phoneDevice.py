@@ -13,11 +13,11 @@ def get_phonedevice_data():
 
 
 def redis_action(df):
-    offical_pool = redis.ConnectionPool(host=REDIS_HOST, db=REDIS_DB)
+    offical_pool = redis.ConnectionPool(host=REDIS_HOST, db=REDIS_PHONE_DEVICES_DB)
     offical_r = redis.Redis(connection_pool=offical_pool)
     phone_devices = dict()
     for phone, data in df.groupby("PHONE"):
-        phone_devices[REDIS_PHONEDEVICE_PREFIX+phone] = set(data['DEVICE'])
+        phone_devices[REDIS_PHONEDEVICE_PREFIX + phone] = set(data['DEVICE'])
 
     with offical_r.pipeline(transaction=False) as p:
         for k, v in phone_devices.items():
