@@ -3,23 +3,36 @@ from analyseUserBehavior.algorithm import algorithm_newHouse, algorithm_phoneDev
 from analyseUserBehavior.command_tool import create_json, datax_command
 from apscheduler.schedulers.blocking import BlockingScheduler
 import pytz
-import datetime
+from datetime import datetime
 
 
 def begin():
+    timez = pytz.timezone('Asia/Shanghai')
+    start_time = datetime.now(timez)
+    print("start time:" + start_time.strftime('%Y-%m-%d %H:%M:%S'))
     create_json.begin()
-    print("create_json finished")
+    create_json_end_time = datetime.now(timez)
+    print("create_json finished, cost time:" + str((create_json_end_time - start_time).seconds))
     datax_command.begin()
-    print("datax finished")
+    datax_command_time = datetime.now(timez)
+    print("datax finished, cost time:" + str((datax_command_time - create_json_end_time).seconds))
     algorithm_newHouse.begin()
-    print("algorithm_newhouse  synchronous finished ")
+    algorithm_newHouse_time = datetime.now(timez)
+    print("algorithm_newhouse  synchronous finished ,cost time:" + str(
+        (algorithm_newHouse_time - datax_command_time).seconds))
     # TODO 暂时先放弃
     # algorithm_secondHouse.begin()
-    # print("algorithm_secondHouse synchronous finished")
+    # algorithm_secondHouse_time = datetime.now()
+    # print("algorithm_secondHouse synchronous finished, cost time:"+(algorithm_secondHouse_time-))
     algorithm_phoneDevice.begin()
-    print("algorithm_phoneDevice synchronous finished")
+    algorithm_phoneDevice_time = datetime.now(timez)
+    print("algorithm_phoneDevice synchronous finished,cost time:" + str(
+        (algorithm_phoneDevice_time - algorithm_newHouse_time).seconds))
     algorithm_crm_profile.begin()
-    print("algorithm_crm_profile synchronous finished")
+    algorithm_crm_profile_time = datetime.now(timez)
+    print("algorithm_crm_profile synchronous finished,cost time:" + str(
+        (algorithm_crm_profile_time - algorithm_phoneDevice_time).seconds))
+    print("end time:" + algorithm_crm_profile_time.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 def begin2():

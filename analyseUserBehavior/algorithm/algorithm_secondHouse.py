@@ -69,7 +69,7 @@ def preparation(df):
 def redis_action(df):
     for device_id, data in df.groupby("DEVICE_ID"):
         for date, values in data.groupby("DATA_DATE"):
-            print(values.to_json(orient="records", force_ascii=False))
+            # print(values.to_json(orient="records", force_ascii=False))
             redis_push(REDIS_SECONDHOUSE_PREFIX + device_id, values.to_json(orient="records", force_ascii=False))
 
 

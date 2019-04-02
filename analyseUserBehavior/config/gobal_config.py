@@ -5,14 +5,17 @@ import pandas as pd
 """
 读取配置文件信息
 """
+
+
 ## 用来控制环境参数
-ENV = 'develop'
+# ENV = 'develop'
 
 
 def get_config(name):
+    env = os.getenv('active', 'develop')
     con = configparser.ConfigParser()
     con.read(os.path.dirname(os.path.abspath(__file__)) + os.sep + 'settings.ini', encoding='utf-8')
-    value = con.get(ENV, name)
+    value = con.get(env, name)
     return value
 
 

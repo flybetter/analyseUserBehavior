@@ -5,6 +5,8 @@ import os
 import json
 from analyseUserBehavior.config.gobal_config import get_config
 import re
+import traceback
+import math
 
 REDIS_HOST = get_config('REDIS_HOST')
 REDIS_DB = get_config("REDIS_DB")
@@ -24,9 +26,13 @@ REDIS_PHONEDEVICE_PREFIX = get_config("REDIS_PHONEDEVICE_PREFIX")
 REDIS_NEWHOUSE_PREFIX = get_config('REDIS_NEWHOUSE_PREFIX')
 REDIS_SECONDHOUSE_PREFIX = get_config('REDIS_SECONDHOUSE_PREFIX')
 
+REDIS_PHONE_DEVICES_DB = get_config('REDIS_PHONE_DEVICES_DB')
+
 # CRM
 REDIS_CRM_DB = get_config('REDIS_CRM_DB')
+REDIS_CRM_HOST = get_config('REDIS_CRM_HOST')
 REDIS_CRM_PREFIX = get_config('REDIS_CRM_PREFIX')
 FILE_CRM_USER_PATH = get_config('FILE_CRM_USER_PATH')
 
 CRM_REGULAR = r'PD\^(\d+)'
+NHLOG_REGULAR = r'NHLOG\^(.+)'
