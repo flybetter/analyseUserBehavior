@@ -81,7 +81,8 @@ class CrmProfile:
 
     @operator_status
     def crm_profile_action(self, df, result):
-        fiter_df = df[df["PRICE_SHOW"].astype(str).str.contains('元/㎡', na=False)]
+        # fiter_df = df[df["PRICE_SHOW"].astype(str).str.contains('元/㎡', na=False)]
+        fiter_df = df[df["PRICE_AVG"] != 0 & df['PRICE_AVG'].notna()]
         result["avg_price"] = fiter_df['PRICE_AVG'].mean()
         result["area"] = df['PIC_AREA'].mean()
         sum_price_df = df.copy()
