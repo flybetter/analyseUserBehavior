@@ -27,6 +27,6 @@ setup(
         'six==1.11.0',
         # 'sklearn==0.0',
         'tzlocal==1.5.1',
-        # 'urllib3==1.23'
+        'pyspark==2.4.1',
     ]
 )

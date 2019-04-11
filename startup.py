@@ -1,6 +1,5 @@
 from analyseUserBehavior.algorithm import algorithm_newHouse, algorithm_phoneDevice, algorithm_secondHouse, \
-    algorithm_crm_profile
-from analyseUserBehavior.command_tool import create_json, datax_command
+    algorithm_crm_profile, algorithm_datax_creatjson, algorithm_datax_command
 from apscheduler.schedulers.blocking import BlockingScheduler
 import pytz
 from datetime import datetime
@@ -10,10 +9,10 @@ def begin():
     timez = pytz.timezone('Asia/Shanghai')
     start_time = datetime.now(timez)
     print("start time:" + start_time.strftime('%Y-%m-%d %H:%M:%S'))
-    create_json.begin()
+    algorithm_datax_creatjson.begin()
     create_json_end_time = datetime.now(timez)
     print("create_json finished, cost time:" + str((create_json_end_time - start_time).seconds))
-    datax_command.begin()
+    algorithm_datax_command.begin()
     datax_command_time = datetime.now(timez)
     print("datax finished, cost time:" + str((datax_command_time - create_json_end_time).seconds))
     algorithm_newHouse.begin()

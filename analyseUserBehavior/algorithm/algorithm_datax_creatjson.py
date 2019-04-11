@@ -5,12 +5,12 @@ import pytz
 
 # FILES = ["newHouse.json", "newHouseLog.json", "phoneDevice.json"]
 # newHouse.json is a full scale
-FILES = ["/app/analyseUserBehavior/analyseUserBehavior/command_tool/newHouseLog.json",
-         "/app/analyseUserBehavior/analyseUserBehavior/command_tool/phoneDevice.json",
-         "/app/analyseUserBehavior/analyseUserBehavior/command_tool/secondHouseLog.json",
-         "/app/analyseUserBehavior/analyseUserBehavior/command_tool/develop_env/newHouseLog.json",
-         "/app/analyseUserBehavior/analyseUserBehavior/command_tool/develop_env/phoneDevice.json",
-         "/app/analyseUserBehavior/analyseUserBehavior/command_tool/develop_env/secondHouseLog.json"]
+FILES = ["/app/analyseUserBehavior/analyseUserBehavior/util/datax_json/newHouseLog.json",
+         "/app/analyseUserBehavior/analyseUserBehavior/util/datax_json/phoneDevice.json",
+         "/app/analyseUserBehavior/analyseUserBehavior/util/datax_json/secondHouseLog.json",
+         "/app/analyseUserBehavior/analyseUserBehavior/util/develop_env/datax_json/newHouseLog.json",
+         "/app/analyseUserBehavior/analyseUserBehavior/util/develop_env/datax_json/phoneDevice.json",
+         "/app/analyseUserBehavior/analyseUserBehavior/util/develop_env/datax_json/secondHouseLog.json"]
 
 
 def format_json(date, file):
