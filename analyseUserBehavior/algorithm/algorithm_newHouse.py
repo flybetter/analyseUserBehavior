@@ -117,4 +117,7 @@ if __name__ == '__main__':
     df_newhouseroom = get_newhouseroom_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
+
+    # TODO get the template csv file
+    df_preparation.to_csv("one_day_newhouse.csv")
     # redis_action(df_preparation)
