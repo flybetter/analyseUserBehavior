@@ -119,5 +119,9 @@ if __name__ == '__main__':
     df_preparation = preparation(df_merge_data)
 
     # TODO get the template csv file
-    df_preparation.to_csv("one_day_newhouse.csv")
+    tmp = df_preparation.copy()
+    tmp["DATA_DATE"] = pd.to_datetime(tmp["DATA_DATE"], unit='D')
+    tmp.drop(columns=['CONTENT'])
+    tmp.to_csv("one_day_newhouse.csv")
+
     # redis_action(df_preparation)
