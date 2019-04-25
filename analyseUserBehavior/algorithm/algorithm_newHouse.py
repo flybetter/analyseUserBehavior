@@ -120,8 +120,9 @@ if __name__ == '__main__':
 
     # TODO get the template csv file
     tmp = df_preparation.copy()
-    tmp["DATA_DATE"] = pd.to_datetime(tmp["DATA_DATE"], unit='D')
-    tmp.drop(columns=['CONTENT'])
-    tmp.to_csv("one_day_newhouse.csv")
+    # tmp["DATA_DATE"] = pd.to_datetime(tmp["DATA_DATE"]).dt.normalize()
+    tmp = tmp.drop(columns=['CONTENT'])
+
+    tmp.to_csv("one_day_newhouse.csv", header=False)
 
     # redis_action(df_preparation)
