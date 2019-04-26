@@ -14,4 +14,7 @@ RUN python3 ./analyseUserBehavior/setup.py install
 #    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys  7638D0442B90D010
 #RUN apt-get update && apt-get install -y vim
 ENV active="production"
+
+# need docker build --add-host cdh1:192.168.10.164
+
 CMD ["python3","-u","./analyseUserBehavior/startup.py"]
