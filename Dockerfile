@@ -1,4 +1,4 @@
-FROM flybetter/analysis:v16
+FROM flybetter/analysis:v18
 MAINTAINER flybetter@163.com
 # Setup the python3 and java System
 

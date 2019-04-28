@@ -17,7 +17,7 @@ def decorator(func):
 
 
 class HiveAction(object):
-    def __init__(self, table_csv="newhouselog_csv", table="newhouselog", local_path=HIVE_NEWHOUSELOG_CSV_PATH,
+    def __init__(self, table_csv=HIVE_TABLE_NAME_CSV, table=HIVE_TABLE_NAME, local_path=HIVE_NEWHOUSELOG_CSV_PATH,
                  hive_path=HIVE_SERVER_NEWHOUSELOG_CSV_PATH):
         self.table_csv = table_csv
         self.table = table
@@ -41,19 +41,3 @@ if __name__ == '__main__':
     hiveaction = HiveAction()
     hiveaction.upload()
     hiveaction.sync()
-#
-# webhdfs_host = "192.168.10.164"
-# impala_host = "192.168.10.164"
-#
-# HIVE_URL
-#
-# hdfs = ibis.hdfs_connect(host=webhdfs_host, port=9870)
-# client = ibis.impala.connect(host=impala_host, database='user_track', hdfs_client=hdfs)
-# hdfs.put(hdfs_path="/user/hive/warehouse/user_track.db/newhouselog_csv/", resource="./one_day_newhouse_test.csv",
-#          overwrite=True)
-#
-# table2 = client.table("newhouselog_csv");
-#
-# table = client.table("newhouselog")
-#
-# table.insert(table2)

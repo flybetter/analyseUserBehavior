@@ -14,3 +14,6 @@ redis==2.10.6
 six==1.11.0
 tzlocal==1.5.1
 ibis-framework==1.0.0
+requests==2.19.1
+hdfs==2.1.0
+impyla==0.15.0
