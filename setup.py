@@ -27,10 +27,7 @@ setup(
         'six==1.11.0',
         # 'sklearn==0.0',
         'tzlocal==1.5.1',
-        'pyspark==2.4.1',
-        'ply==3.11',
-        'thriftpy2==0.4.0',
-        'ply<4.0,>=3.4',
-        'impyla==0.15.0'
+        # 'pyspark==2.4.1',
+        'ibis-framework==1.0.0',
     ]
 )

@@ -1,4 +1,4 @@
-FROM flybetter/analysis:v11
+FROM flybetter/analysis:v16
 MAINTAINER flybetter@163.com
 # Setup the python3 and java System
 
@@ -15,6 +15,6 @@ RUN python3 ./analyseUserBehavior/setup.py install
 #RUN apt-get update && apt-get install -y vim
 ENV active="production"
 
-# need docker build --add-host cdh1:192.168.10.164
+# need docker build --add-host cdh1:192.168.10.164 .
 
 CMD ["python3","-u","./analyseUserBehavior/startup.py"]

@@ -3,7 +3,7 @@ CREATE  TABLE `newHouseLog_csv`(
   DEVICE_ID string ,
   CONTEXT_ID string ,
   CITY_x string ,
-  DATA_DATE string ,
+  DATA_DATE date,
   LOGIN_ACCOUNT double ,
   START_TIME string ,
   END_TIME string ,

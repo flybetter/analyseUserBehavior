@@ -100,6 +100,12 @@ def redis_push(name, value):
         r.rpop(name)
 
 
+def csv_action(df):
+    df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
+    df = df.drop(columns=['CONTENT'])
+    df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False)
+
+
 def begin():
     df_newhouselog = get_newhouselog_data()
     df_newhouse = get_newhouse_data()
@@ -117,12 +123,5 @@ if __name__ == '__main__':
     df_newhouseroom = get_newhouseroom_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
-
-    # TODO get the template csv file
-    tmp = df_preparation.copy()
-    # tmp["DATA_DATE"] = pd.to_datetime(tmp["DATA_DATE"]).dt.normalize()
-    tmp = tmp.drop(columns=['CONTENT'])
-
-    tmp.to_csv("one_day_newhouse.csv", header=False)
-
+    csv_action(df_preparation)
     # redis_action(df_preparation)
