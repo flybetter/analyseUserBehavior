@@ -3,15 +3,15 @@ import sys
 import os
 
 COMMANDS = [
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/newHouseLog.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/newHouse.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/phoneDevice.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/newHouseRoom.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/newHouseModel.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/newHouseLog.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/newHouse.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/phoneDevice.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/newHouseRoom.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/newHouseModel.json",
     "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/block.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/secondHouse.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/secondHouseLog.json",
-    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/crmUserAccountInfo.json"]
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/secondHouse.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/secondHouseLog.json",
+    "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/offical_env/crmUserAccountInfo.json"]
 
 DEV_COMMANDS = [
     "python /app/datax/bin/datax.py /app/analyseUserBehavior/analyseUserBehavior/util/datax_json/develop_env/newHouseLog.json",
