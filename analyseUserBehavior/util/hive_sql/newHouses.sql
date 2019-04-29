@@ -1,9 +1,8 @@
-CREATE  TABLE `newHouseLog_csv`(
+CREATE  TABLE `newhouselog_csv`(
   id bigint,
   DEVICE_ID string ,
   CONTEXT_ID string ,
   CITY_x string ,
-  DATA_DATE date,
   LOGIN_ACCOUNT double ,
   START_TIME string ,
   END_TIME string ,
@@ -32,12 +31,12 @@ CREATE  TABLE `newHouseLog_csv`(
   PIC_TYPE string ,
   PIC_DESC string ,
   PIC_TING string ,
-  PIC_WEI double ,
-  PIC_CHU double ,
+  PIC_WEI int ,
+  PIC_CHU int ,
   PIC_AREA double ,
   PIC_SELL_POINT string ,
   PIC_HX_TOTALPRICE double ,
-  ROOM_ID double ,
+  ROOM_ID int ,
   FLATS double ,
   PRICE double ,
   TOTALPRICE double
@@ -45,12 +44,11 @@ CREATE  TABLE `newHouseLog_csv`(
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
 
 
-CREATE  TABLE `newHouseLog`(
+CREATE  TABLE `newhouselog`(
   id bigint,
   DEVICE_ID string ,
   CONTEXT_ID string ,
   CITY_x string ,
-  DATA_DATE string ,
   LOGIN_ACCOUNT double ,
   START_TIME string ,
   END_TIME string ,
@@ -79,8 +77,8 @@ CREATE  TABLE `newHouseLog`(
   PIC_TYPE string ,
   PIC_DESC string ,
   PIC_TING string ,
-  PIC_WEI double ,
-  PIC_CHU double ,
+  PIC_WEI int ,
+  PIC_CHU int ,
   PIC_AREA double ,
   PIC_SELL_POINT string ,
   PIC_HX_TOTALPRICE double ,
@@ -88,6 +86,7 @@ CREATE  TABLE `newHouseLog`(
   FLATS double ,
   PRICE double ,
   TOTALPRICE double
-  )COMMENT 'This is new house table'
+  )partitioned by (DATA_DATE string)
 STORED AS PARQUET;
 
+insert into newhouselog_test partition (data_date='2019-4-28') select * from newhouselog_csv;

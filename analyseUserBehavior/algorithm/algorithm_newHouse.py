@@ -1,4 +1,5 @@
 from analyseUserBehavior.algorithm import *
+from analyseUserBehavior.algorithm import algorithm_hive_transmission
 
 
 def custom(df):
@@ -103,7 +104,7 @@ def redis_push(name, value):
 def csv_action(df):
     df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
     df = df.drop(columns=['CONTENT'])
-    df.to_csv(path=HIVE_NEWHOUSELOG_CSV_PATH, header=False)
+    df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False)
 
 
 def begin():
@@ -113,6 +114,8 @@ def begin():
     df_newhouseroom = get_newhouseroom_data()
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
+    csv_action(df_preparation)
+    algorithm_hive_transmission.begin()
     redis_action(df_preparation)
 
 

@@ -3,7 +3,7 @@ MAINTAINER flybetter@163.com
 # Setup the python3 and java System
 
 COPY . /app
-WORKDIR /app
+WORKDIR /appp
 RUN python3 ./analyseUserBehavior/setup.py install
 #RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
 #    && echo "deb http://mirrors.163.com/debian/ jessie main non-free contrib" >/etc/apt/sources.list \
@@ -15,6 +15,7 @@ RUN python3 ./analyseUserBehavior/setup.py install
 #RUN apt-get update && apt-get install -y vim
 ENV active="production"
 
-# need docker build --add-host cdh1:192.168.10.164 .
+# need docker build --add-host cdh1:192.168.10.164 --add-host  cdh2:192.168.10.163 --add-host cdh3:192.168.10.166 .
+
 
 CMD ["python3","-u","./analyseUserBehavior/startup.py"]
