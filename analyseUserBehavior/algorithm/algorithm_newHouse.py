@@ -102,8 +102,8 @@ def redis_push(name, value):
 
 
 def csv_action(df):
-    df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
-    df = df.drop(columns=['CONTENT'])
+    # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
+    df = df.drop(columns=['CONTENT', 'DATA_DATE'])
     df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False)
 
 
@@ -127,4 +127,5 @@ if __name__ == '__main__':
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
     csv_action(df_preparation)
+    algorithm_hive_transmission.begin()
     # redis_action(df_preparation)

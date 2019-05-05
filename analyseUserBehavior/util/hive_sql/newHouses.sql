@@ -1,3 +1,4 @@
+-- hive
 CREATE  TABLE `newhouselog_csv`(
   id bigint,
   DEVICE_ID string ,
@@ -90,3 +91,52 @@ CREATE  TABLE `newhouselog`(
 STORED AS PARQUET;
 
 insert into newhouselog_test partition (data_date='2019-4-28') select * from newhouselog_csv;
+
+
+
+-- mysql
+create table user_profile_final
+(
+  id  bigint(20) primary key  auto_increment,
+  DEVICE_ID         varchar(255) null,
+  CONTEXT_ID        text         null,
+  CITY_x            text         null,
+  LOGIN_ACCOUNT     double       null,
+  START_TIME        datetime     null,
+  END_TIME          datetime     null,
+  CHANNEL           bigint       null,
+  OBJECT_ID         double       null,
+  CONTEXT           bigint       null,
+  ROOMID            text         null,
+  PROJECTTYPE       bigint       null,
+  MODELID           text         null,
+  PROJECTID         bigint       null,
+  SHAIXUAN          double       null,
+  PRJ_LISTID        bigint       null,
+  CITY_y            text         null,
+  CITY_NAME         text         null,
+  PRJ_ITEMNAME      text         null,
+  PRJ_LOC           text         null,
+  PRJ_DECORATE      text         null,
+  PRJ_VIEWS         varchar(255) null,
+  B_LNG             varchar(255) null,
+  B_LAT             varchar(255) null,
+  PRICE_AVG         bigint       null,
+  PRICE_SHOW        text         null,
+  PIC_ID            double       null,
+  PIC_PRJID         double       null,
+  PIC_PRJNAME       text         null,
+  PIC_DESC          text         null,
+  PIC_TYPE          double       null,
+  PIC_TING          varchar(255) null,
+  PIC_WEI           double       null,
+  PIC_CHU           double       null,
+  PIC_AREA          double       null,
+  PIC_SELL_POINT    text         null,
+  PIC_HX_TOTALPRICE varchar(255) null,
+  ROOM_ID           double       null,
+  FLATS             double       null,
+  PRICE             double       null,
+  TOTALPRICE        double       null,
+  DATA_DATE         bigint       null
+);
