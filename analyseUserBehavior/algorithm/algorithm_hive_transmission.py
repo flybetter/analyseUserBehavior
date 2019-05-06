@@ -39,14 +39,15 @@ class HiveAction(object):
     def sync(self):
         timez = pytz.timezone('Asia/Shanghai')
         format_date = (datetime.now(tz=timez) - timedelta(days=1)).strftime("%Y-%m-%d")
+        self.cursor.execute("refresh user_track.{}".format(self.table_csv))
         self.cursor.execute(
             "insert into user_track.{} partition (data_date='{}') select * from user_track.{}".format(self.table,
                                                                                                       format_date,
                                                                                                       self.table_csv))
 
 
-def begin():
-    hiveaction = HiveAction()
+def begin(table_csv, table):
+    hiveaction = HiveAction(table_csv, table)
     hiveaction.upload()
     hiveaction.sync()
 
@@ -55,6 +56,7 @@ if __name__ == '__main__':
     hiveaction = HiveAction()
     hiveaction.upload()
     hiveaction.sync()
+
     # format_date = "2018-9-11"
     # aa = "insert into user_track.newhouselog_test partition (data_date='{}') select * from user_track.newhouselog_csv".format(
     #     format_date)

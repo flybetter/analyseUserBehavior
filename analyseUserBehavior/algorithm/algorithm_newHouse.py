@@ -115,7 +115,7 @@ def begin():
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
     csv_action(df_preparation)
-    algorithm_hive_transmission.begin()
+    algorithm_hive_transmission.begin(table="newhouselog", table_csv="newhouselog_csv")
     redis_action(df_preparation)
 
 
@@ -127,5 +127,5 @@ if __name__ == '__main__':
     df_merge_data = merge_newhouse(df_newhouse, df_newhouselog, df_newhousemodel, df_newhouseroom)
     df_preparation = preparation(df_merge_data)
     csv_action(df_preparation)
-    algorithm_hive_transmission.begin()
+    algorithm_hive_transmission.begin(table="newhouselog", table_csv="newhouselog_csv")
     # redis_action(df_preparation)

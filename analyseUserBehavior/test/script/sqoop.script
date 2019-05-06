@@ -1,3 +1,3 @@
-nohup sudo -u hdfs sqoop import --connect jdbc:mysql://192.168.10.221:3306/demo --username root --password idontcare --table user_profile_v3  -m 1 --hive-import --hive-database user_track &
+nohup sudo -u hdfs sqoop import --connect jdbc:mysql://192.168.10.221:3306/demo --username root --password idontcare --table user_profile_final  -m 1 --hive-import --hive-database user_track &
 
 # use script to synchronize the data in mysql
