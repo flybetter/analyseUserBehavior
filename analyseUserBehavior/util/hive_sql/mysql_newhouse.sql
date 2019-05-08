@@ -43,4 +43,13 @@ CREATE TABLE `user_profile_perfect` (
   `CONTENT` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
+alter table user_profile_perfect add column content varchar (255);
 
+alter table user_profile_perfect add column human_date varchar (255);
+
+
+update user_profile_perfect set human_date= from_unixtime(DATA_DATE/1000,'%Y-%m-%d');
+alter table user_profile_perfect drop  column CONTENT;
+alter table user_profile_perfect drop  column DATA_DATE;
+
+alter table user_profile_perfect change column human_date DATA_DATE varchar (255)
