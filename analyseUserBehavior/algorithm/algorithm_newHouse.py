@@ -104,6 +104,13 @@ def redis_push(name, value):
 def csv_action(df):
     # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
     df = df.drop(columns=['CONTENT', 'DATA_DATE'])
+    df["CHANNEL"] = df["CHANNEL"].astype('uint8')
+    df["FLATS"].replace(np.nan, 0, inplace=True)
+    df["FLATS"] = df["FLATS"].astype('uint8')
+    df["PRJ_LISTID"].replace(np.nan, 0, inplace=True)
+    df["PRJ_LISTID"] = df["PRJ_LISTID"].astype('uint32')
+    df["PRICE_AVG"].replace(np.nan, 0, inplace=True)
+    df["PRICE_AVG"] = df["PRICE_AVG"].astype('uint32')
     df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False, index=False)
 
 
