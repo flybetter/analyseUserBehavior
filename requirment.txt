@@ -11,8 +11,9 @@ pyparsing==2.2.0
 python-dateutil==2.7.3
 pytz==2018.5
 redis==2.10.6
-requests==2.19.1
-simplejson==3.16.0
 six==1.11.0
 tzlocal==1.5.1
-urllib3==1.23
+ibis-framework==1.0.0
+requests==2.19.1
+hdfs==2.1.0
+impyla==0.15.0

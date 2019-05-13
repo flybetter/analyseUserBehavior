@@ -1,0 +1,5 @@
+1201    Gopal   45000   Technical manager
+1202    Manisha 45000   Proof reader
+1203    lisong  50000   what is you
+1204    xiaohau 88888   abcdefg
+1205    xiaoming 99999   hehehehe
