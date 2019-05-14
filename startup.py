@@ -19,10 +19,10 @@ def begin():
     algorithm_newHouse_time = datetime.now(timez)
     print("algorithm_newhouse  synchronous finished ,cost time:" + str(
         (algorithm_newHouse_time - datax_command_time).seconds))
-    # TODO 暂时先放弃
-    # algorithm_secondHouse.begin()
-    # algorithm_secondHouse_time = datetime.now()
-    # print("algorithm_secondHouse synchronous finished, cost time:"+(algorithm_secondHouse_time-))
+    algorithm_secondHouse.begin()
+    algorithm_secondHouse_time = datetime.now()
+    print("algorithm_secondHouse synchronous finished, cost time:" + str(
+        (algorithm_secondHouse_time - algorithm_newHouse_time).seconds))
     algorithm_phoneDevice.begin()
     algorithm_phoneDevice_time = datetime.now(timez)
     print("algorithm_phoneDevice synchronous finished,cost time:" + str(

@@ -46,10 +46,10 @@ class HiveAction(object):
                                                                                                       self.table_csv))
 
 
-def begin(table_csv, table):
-    hiveaction = HiveAction(table_csv, table)
-    hiveaction.upload()
-    hiveaction.sync()
+def begin(table_csv, table, local_path=HIVE_NEWHOUSELOG_CSV_PATH, hive_path=HIVE_SERVER_NEWHOUSELOG_CSV_PATH):
+    hive_action = HiveAction(table_csv, table, local_path, hive_path)
+    hive_action.upload()
+    hive_action.sync()
 
 
 if __name__ == '__main__':

@@ -1,4 +1,8 @@
 from analyseUserBehavior.algorithm import *
+from analyseUserBehavior.algorithm import algorithm_hive_transmission
+
+
+# from sqlalchemy import create_engine
 
 
 def custom(df):
@@ -28,12 +32,11 @@ def get_secondhouse_data(file_path=FILE_SECONDHOUSE_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
-        colName = ["SECONDHOUSE_ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "ISREAL", "BLOCKSHOWNAME",
-                   "MRIGHT",
-                   "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "GARDENAREA", "SUBFLOOR", "FLOOR",
+        colName = ["SECONDHOUSE_ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "BLOCKSHOWNAME",
+                   "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "SUBFLOOR", "FLOOR",
                    "TOTALFLOOR", "ROOM", "HALL", "TOILET", "KITCHEN", "BALCONY", "FORWARD", "PRICE", "AVERPRICE",
-                   "PRICETERM", "PRICETYPE", "BASESERVICE", "EQUIPMENT", "ENVIRONMENT", "TRAFFIC", "FITMENT",
-                   "SERVERCO", "CONTACTOR", "TELNO", "MOBILE", "PIC1", "CREATTIME", "UPDATETIME", "EXPIRETIME"]
+                   "ENVIRONMENT", "TRAFFIC", "FITMENT",
+                   "SERVERCO", "CONTACTOR", "TELNO", "MOBILE","CREATTIME", "UPDATETIME", "EXPIRETIME"]
         df = pd.read_csv(file_path + path, names=colName,
                          low_memory=False, dtype={'SECONDHOUSE_ID': object, 'BLOCKID': object})
         return df
@@ -81,13 +84,48 @@ def redis_push(name, value):
         r.rpop(name)
 
 
+def csv_action(df):
+    # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
+    df = df.drop(columns='DATA_DATE')
+    df["GARDENAREA"].replace(np.nan, 0, inplace=True)
+    df["GARDENAREA"] = df["GARDENAREA"].astype('uint8')
+    df["SUBFLOOR"].replace(np.nan, 0, inplace=True)
+    df["SUBFLOOR"] = df["SUBFLOOR"].astype('uint8')
+    df["FLOOR"].replace(np.nan, 0, inplace=True)
+    df["FLOOR"] = df["FLOOR"].astype('uint8')
+    df["TOTALFLOOR"].replace(np.nan, 0, inplace=True)
+    df["TOTALFLOOR"] = df["TOTALFLOOR"].astype('uint8')
+    df["ROOM"].replace(np.nan, 0, inplace=True)
+    df["ROOM"] = df["ROOM"].astype('uint8')
+    df["HALL"].replace(np.nan, 0, inplace=True)
+    df["HALL"] = df["HALL"].astype('uint8')
+    df["TOILET"].replace(np.nan, 0, inplace=True)
+    df["TOILET"] = df["TOILET"].astype('uint8')
+    df["KITCHEN"].replace(np.nan, 0, inplace=True)
+    df["KITCHEN"] = df["KITCHEN"].astype('uint8')
+    df["BALCONY"].replace(np.nan, 0, inplace=True)
+    df["BALCONY"] = df["BALCONY"].astype('uint8')
+    df["PRICE"].replace(np.nan, 0, inplace=True)
+    df["PRICE"] = df["PRICE"].astype('uint8')
+    df.to_csv(HIVE_SECONDHOUSELOG_CSV_PATH, header=False, index=False, sep='|')
+
+
+# def to_mysql(df):
+# engine = create_engine('mysql+pymysql://root:idontcare@192.168.10.221/demo')
+# df.to_sql('secondhouse_demo', con=engine, if_exists='append', index=False)
+
+
 def begin():
     df_secondhouselog = get_secondhouselog_data()
     df_secondhouse = get_secondhouse_data()
     df_block = get_block_data()
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
-    redis_action(df_preparation)
+    csv_action(df_preparation)
+    algorithm_hive_transmission.begin(table="secondhouselog", table_csv="secondhouselog_csv",
+                                      local_path=HIVE_SECONDHOUSELOG_CSV_PATH,
+                                      hive_path=HIVE_SERVER_SECONDHOUSELOG_CSV_PATH)
+    # redis_action(df_preparation)
 
 
 if __name__ == '__main__':
@@ -96,5 +134,7 @@ if __name__ == '__main__':
     df_block = get_block_data()
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
-    print(df_preparation.head(100))
-    # redis_action(df_preparation)c
+    csv_action(df_preparation)
+    algorithm_hive_transmission.begin(table="secondhouselog", table_csv="secondhouselog_csv",
+                                      local_path=HIVE_SECONDHOUSELOG_CSV_PATH,
+                                      hive_path=HIVE_SERVER_SECONDHOUSELOG_CSV_PATH)
