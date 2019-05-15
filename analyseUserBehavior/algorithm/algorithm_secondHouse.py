@@ -87,8 +87,6 @@ def redis_push(name, value):
 def csv_action(df):
     # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
     df = df.drop(columns='DATA_DATE')
-    df["GARDENAREA"].replace(np.nan, 0, inplace=True)
-    df["GARDENAREA"] = df["GARDENAREA"].astype('uint8')
     df["SUBFLOOR"].replace(np.nan, 0, inplace=True)
     df["SUBFLOOR"] = df["SUBFLOOR"].astype('uint8')
     df["FLOOR"].replace(np.nan, 0, inplace=True)
