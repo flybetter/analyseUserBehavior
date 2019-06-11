@@ -32,11 +32,11 @@ def get_secondhouse_data(file_path=FILE_SECONDHOUSE_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
-        colName = ["SECONDHOUSE_ID", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "BLOCKSHOWNAME",
+        colName = ["SECONDHOUSE_ID", "CITY_NAME_data", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "BLOCKSHOWNAME",
                    "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "SUBFLOOR", "FLOOR",
                    "TOTALFLOOR", "ROOM", "HALL", "TOILET", "KITCHEN", "BALCONY", "FORWARD", "PRICE", "AVERPRICE",
                    "ENVIRONMENT", "TRAFFIC", "FITMENT",
-                   "SERVERCO", "CONTACTOR", "TELNO", "MOBILE","CREATTIME", "UPDATETIME", "EXPIRETIME"]
+                   "SERVERCO", "CONTACTOR", "TELNO", "MOBILE", "CREATTIME", "UPDATETIME", "EXPIRETIME"]
         df = pd.read_csv(file_path + path, names=colName,
                          low_memory=False, dtype={'SECONDHOUSE_ID': object, 'BLOCKID': object})
         return df
@@ -58,8 +58,8 @@ def get_block_data(file_path=FILE_BLOCK_PATH):
 
 def merge_secondhouse(df_secondhouse, df_secondhouselog, df_block):
     df = pd.merge(left=df_secondhouselog, right=df_secondhouse, how="left",
-                  left_on='CONTEXT',
-                  right_on='SECONDHOUSE_ID')
+                  left_on=['CONTEXT', 'CITY'],
+                  right_on=['SECONDHOUSE_ID', 'CITY_NAME_data'])
     df = df.merge(df_block, left_on=['CITY', 'BLOCKID'], right_on=['CITY_NAME', 'BLOCK_ID'], how='left')
     return df
 
@@ -87,6 +87,7 @@ def redis_push(name, value):
 def csv_action(df):
     # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
     df = df.drop(columns='DATA_DATE')
+    df = df.drop(columns='CITY_NAME_data')
     df["SUBFLOOR"].replace(np.nan, 0, inplace=True)
     df["SUBFLOOR"] = df["SUBFLOOR"].astype('uint8')
     df["FLOOR"].replace(np.nan, 0, inplace=True)
@@ -104,7 +105,6 @@ def csv_action(df):
     df["BALCONY"].replace(np.nan, 0, inplace=True)
     df["BALCONY"] = df["BALCONY"].astype('uint8')
     df["PRICE"].replace(np.nan, 0, inplace=True)
-    df["PRICE"] = df["PRICE"].astype('uint8')
     df.to_csv(HIVE_SECONDHOUSELOG_CSV_PATH, header=False, index=False, sep='|')
 
 

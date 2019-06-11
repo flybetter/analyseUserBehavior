@@ -29,7 +29,7 @@ CREATE TABLE secondhouselog_csv (
   kitchen     INT,
   balcony     INT,
   forward STRING,
-  price       INT,
+  price       DOUBLE,
   averprice_x DOUBLE,
   environment STRING,
   traffic STRING,
@@ -115,7 +115,7 @@ CREATE TABLE secondhouselog(
   kitchen     INT,
   balcony     INT,
   forward STRING,
-  price       INT,
+  price       DOUBLE,
   averprice_x DOUBLE,
   environment STRING,
   traffic STRING,
@@ -169,6 +169,10 @@ CREATE TABLE secondhouselog(
 )partitioned by (data_date string)
 COMMENT 'This is second house log table'
 STORED AS PARQUET;
+
+insert into user_track.secondhouselog_back partition(data_date='{}') select device_id,context_id,city,login_account,start_time,end_time,content,object_id,context,secondhouse_id,esta_x,district_x,address_x,streetid_x,blockid,blockshowname,purpose,structure,buildtype,buildyear,buildarea,subfloor,floor,totalfloor,room,hall,toilet,kitchen,balcony,forward,price,averprice_x,environment,traffic,fitment,serverco,contactor,telno,mobile,creattime,updatetime,expiretime,city_name,block_id,blockname,district_y,streetid_y,area,address_y,bus,averprice_y,updateprice,forumid,newhouseid,b_map_x,b_map_y,accuracy,map_test,b_property_type,b_green,b_parking,b_developers,b_property_company,b_property_fees,b_bus,b_metro,b_num,bi_s,bi_spell,subway,sitename,subwayrange,app,esta_y,property_fees,nofee,plot_ratio,total_room,turn_time,b_area,feature from user_track.secondhouselog where data_date='{}'
+
+
 
 
 
