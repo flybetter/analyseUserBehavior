@@ -101,6 +101,15 @@ def redis_push(name, value):
         r.rpop(name)
 
 
+def get_sum_price(sum_price, area, avg_price):
+    if pd.notna(sum_price):
+        return re.sub(u'[\u4E00-\u9FA5]', '', str(sum_price))
+    elif pd.notna(area) and pd.notna(avg_price):
+        return area * avg_price / 10000
+    else:
+        return np.NAN
+
+
 def csv_action(df):
     # df["DATA_DATE"] = pd.to_datetime(df["DATA_DATE"]).dt.date
     df = df.drop(columns=['CONTENT', 'DATA_DATE'])
@@ -111,6 +120,9 @@ def csv_action(df):
     df["PRJ_LISTID"] = df["PRJ_LISTID"].astype('uint32')
     df["PRICE_AVG"].replace(np.nan, 0, inplace=True)
     df["PRICE_AVG"] = df["PRICE_AVG"].astype('uint32')
+    df["PIC_AREA"] = pd.to_numeric(df['PIC_AREA'], errors='coerce')
+    df["PIC_HX_TOTALPRICE"] = df.apply(lambda x: get_sum_price(x['PIC_HX_TOTALPRICE'], x['PIC_AREA'], x['PRICE_AVG']),
+                                       axis=1)
     df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False, index=False)
 
 
