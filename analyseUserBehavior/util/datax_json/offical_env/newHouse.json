@@ -16,7 +16,7 @@
             "connection": [
               {
                 "querySql": [
-                  "select pr.PRJ_LISTID,ch.CHANNEL,ch.CITY,city.CITY_NAME,pr.PRJ_ITEMNAME,pr.PRJ_LOC,pr.PRJ_DECORATE,pr.PRJ_VIEWS,pr.B_LNG,pr.B_LAT,ch.price_avg,ch.price_show from DWB_WEB_PROJECT pr  join dwb_web_w_channel ch on pr.PRJ_ID=ch.PRJ_ID  join DWD_REC_CITY city on city.CITY_ID =pr.PRJ_CITY where  pr.PRJ_DISP=1 and pr.B_LNG !=0 and pr.B_LNG is not null "
+                  "select pr.PRJ_LISTID,ch.CHANNEL,ch.CITY,city.CITY_NAME,pr.PRJ_ITEMNAME,pr.PRJ_LOC,pr.PRJ_DECORATE,pr.PRJ_VIEWS,pr.B_LNG,pr.B_LAT,ch.price_avg,ch.price_show from DWB_WEB_PROJECT pr  join dwb_web_w_channel ch on pr.PRJ_ID=ch.PRJ_ID  join DWD_REC_CITY city on city.CITY_ID =pr.PRJ_CITY  "
                 ],
                 "jdbcUrl": [
                   "jdbc:oracle:thin:@172.17.1.195:1521:app"
