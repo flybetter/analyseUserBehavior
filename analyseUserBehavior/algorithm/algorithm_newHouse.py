@@ -125,6 +125,8 @@ def csv_action(df):
     df["PIC_AREA"] = pd.to_numeric(df['PIC_AREA'], errors='coerce')
     df["PIC_HX_TOTALPRICE"] = df.apply(lambda x: get_sum_price(x['PIC_HX_TOTALPRICE'], x['PIC_AREA'], x['PRICE_AVG']),
                                        axis=1)
+    di = {8: 1, 9: 2, 10: 3, 11: 4, 21: 5, 22: 6}
+    df = df.replace({"PIC_TYPE": di})
     df.to_csv(HIVE_NEWHOUSELOG_CSV_PATH, header=False, index=False)
 
 
