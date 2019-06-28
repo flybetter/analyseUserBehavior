@@ -120,6 +120,8 @@ def csv_action(df):
     df["PRJ_LISTID"] = df["PRJ_LISTID"].astype('uint32')
     df["PRICE_AVG"].replace(np.nan, 0, inplace=True)
     df["PRICE_AVG"] = df["PRICE_AVG"].astype('uint32')
+    df["PIC_TYPE"].replace(np.nan, 0, inplace=True)
+    df["PIC_TYPE"] = df["PIC_TYPE"].astype('uint32')
     df["PIC_AREA"] = pd.to_numeric(df['PIC_AREA'], errors='coerce')
     df["PIC_HX_TOTALPRICE"] = df.apply(lambda x: get_sum_price(x['PIC_HX_TOTALPRICE'], x['PIC_AREA'], x['PRICE_AVG']),
                                        axis=1)
