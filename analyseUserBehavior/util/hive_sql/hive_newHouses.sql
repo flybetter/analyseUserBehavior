@@ -30,12 +30,12 @@ CREATE TABLE newhouselog_csv (
   pic_prjname STRING,
   pic_type    INT,
   pic_desc STRING,
-  pic_ting STRING,
+  pic_ting INT,
   pic_wei     INT,
   pic_chu     INT,
   pic_area    DOUBLE,
   pic_sell_point STRING,
-  pic_hx_totalprice STRING,
+  pic_hx_totalprice DOUBLE,
   room_id STRING,
   flats       INT,
   price       DOUBLE,
@@ -76,12 +76,12 @@ CREATE TABLE newhouselog (
   pic_prjname STRING,
   pic_type    INT,
   pic_desc STRING,
-  pic_ting STRING,
+  pic_ting INT,
   pic_wei     INT,
   pic_chu     INT,
   pic_area    DOUBLE,
   pic_sell_point STRING,
-  pic_hx_totalprice STRING,
+  pic_hx_totalprice DOUBLE,
   room_id STRING,
   flats       INT,
   price       DOUBLE,
@@ -91,7 +91,7 @@ COMMENT 'This is new house log table'
 STORED AS PARQUET;
 
 
-insert into newhouselog partition (data_date='2019-05-09') select * from newhouselog_csv;
+insert into newhouselog partition (data_date='2019-07-02') select * from newhouselog_csv;
 
 
 insert into newhouselog partition(data_date='2019-05-09') select DEVICE_ID,CONTEXT_ID,CITY_x,LOGIN_ACCOUNT,START_TIME,END_TIME,OBJECT_ID,CHANNEL,CONTEXT,ROOMID,PROJECTTYPE,MODELID,PROJECTID,SHAIXUAN,PRJ_LISTID,CITY_y,CITY_NAME,PRJ_ITEMNAME,PRJ_LOC,PRJ_DECORATE,PRJ_VIEWS,B_LNG,B_LAT,PRICE_AVG,PRICE_SHOW,PIC_ID,PIC_PRJID,PIC_PRJNAME,PIC_TYPE,PIC_DESC,PIC_TING,PIC_WEI,PIC_CHU,PIC_AREA,PIC_SELL_POINT,PIC_HX_TOTALPRICE,ROOM_ID,FLATS,PRICE,TOTALPRICE from user_profile_final where data_date='2019-05-09'
