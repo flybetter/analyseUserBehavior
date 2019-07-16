@@ -249,9 +249,6 @@ left join dwb_account_device_phone as phone on new.device_id=phone.deviceid;
 CREATE TABLE`newhouselog_csv_tmp` AS SELECT new.device_id,new.context_id,new.city_x,(case when length(trim(new.login_account))=0 then phone.phone when new.login_account='null' then phone.phone when new.login_account is null then phone.phone else new.login_account end) as login_account,new.start_time,new.end_time,new.object_id,new.channel,new.context,new.roomid,new.projecttype,new.modelid,new.projectid,new.shaixuan,new.prj_listid,new.city_y,new.city_name,new.prj_itemname,new.prj_loc,new.prj_decorate,new.prj_views,new.b_lng,new.b_lat,new.price_avg,new.price_show,new.pic_id,new.pic_prjid,new.pic_prjname,new.pic_type,new.pic_desc,new.pic_ting,new.pic_wei,new.pic_chu,new.pic_area,new.pic_sell_point,new.pic_hx_totalprice,new.room_id,new.flats,new.price,new.totalprice FROM newhouselog_csv as new left join dwb_account_device_phone as phone on new.device_id=phone.deviceid;
 
 
-
-
-
 select count(*) as count,district_x,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and city='南京' group by login_account,district_x order by count desc limit 300;
 
 
