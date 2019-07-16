@@ -252,5 +252,19 @@ CREATE TABLE`newhouselog_csv_tmp` AS SELECT new.device_id,new.context_id,new.cit
 
 
 
+select count(*) as count,district_x,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and city='南京' group by login_account,district_x order by count desc limit 300;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
