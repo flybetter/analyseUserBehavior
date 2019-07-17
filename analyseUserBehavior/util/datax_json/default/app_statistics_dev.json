@@ -1,0 +1,41 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "app",
+            "password": "app",
+            "where": "",
+            "connection": [
+              {
+                "querySql": [
+                  "select DEVICE_ID,PHONE  from DWD_APP_PHONE_DEVICE"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "txtfilewriter",
+          "parameter": {
+            "path": "/home/michael/datax_data/phoneDevice/",
+            "fileName": "phoneDevice.txt",
+            "writeMode": "truncate",
+            "dateFormat": "yyyy-MM-dd hh:mm:ss.sss",
+            "fileFormat": "csv"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -252,6 +252,11 @@ CREATE TABLE`newhouselog_csv_tmp` AS SELECT new.device_id,new.context_id,new.cit
 select count(*) as count,district_x,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and city='南京' group by login_account,district_x order by count desc limit 300;
 
 
+sudo -u hdfs sqoop import --connect jdbc:oracle:thin:@202.102.83.165:1521:app --username app --password app --table DWB_ACCOUNT_DEVICE_PHONE -m 1 --hive-import --hive-overwrite  --hive-database user_track
+
+
+
+
 
 
 
