@@ -147,6 +147,187 @@ create table tmp as SELECT login_account,district_x,count(*) as count,round(avg(
 select aa.login_account,aa.district_x,aa.rn from (
 select login_account, district_x, row_number() over(partition by login_account order by count desc ) rn from tmp) aa where aa.rn<=1;
 
+--final
+
+select * from (
+select count(*) as count,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and city='南京' and length(login_account) >0 group by login_account order by count desc
+) aa,(
+select aa.login_account,aa.district_x,aa.rn from (
+select login_account, district_x, row_number() over(partition by login_account order by count desc ) rn from tmp) aa where aa.rn<=1
+) bb where aa.login_account=bb.login_account and aa.login_account='18851607155'
+
+
+select * from (
+select count(*) as count,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and city='南京' and length(login_account) >0 group by login_account order by count desc
+) aa,(
+select aa.login_account,aa.district_x,aa.rn from (
+select login_account, district_x, row_number() over(partition by login_account order by count desc ) rn from (SELECT login_account,district_x,count(*) as count,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2)  from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and length(login_account)>0 GROUP BY login_account,district_x  ORDER BY count desc)) aa where aa.rn<=1
+) bb where aa.login_account=bb.login_account and aa.login_account='18851607155'
+
+
+select * from (
+select count(*) as count,city,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and length(login_account) >0 group by login_account,city order by count desc
+) aa,(
+select aa.login_account,aa.district_x,aa.rn from (
+select cc.login_account, cc.district_x, row_number() over(partition by cc.login_account order by cc.count desc ) rn from
+(SELECT login_account,district_x,count(*) as count,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2)  from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and length(login_account)>0 GROUP BY login_account,district_x  ORDER BY count desc) cc) aa where aa.rn<=1
+) bb where aa.login_account=bb.login_account
+
+
+--final
+
+select * from (
+select count(*) as count,city,login_account,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2) from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and length(login_account) >0 group by login_account,city
+) aa,(
+select aa.login_account,aa.district_x,aa.rn from (
+select cc.login_account, cc.district_x, row_number() over(partition by cc.login_account order by cc.count desc ) rn from
+(SELECT login_account,district_x,count(*) as count,round(avg(price),2), round( avg(averprice_x),2), round(avg(buildarea),2)  from secondhouselog where data_date between '2019-07-08' and '2019-07-12' and length(login_account)>0 GROUP BY login_account,district_x  ORDER BY count desc) cc) aa where aa.rn<=1
+) bb where aa.login_account=bb.login_account order by count desc;
+
+-- 18100187274
+
+
+
+
+CREATE TABLE `newhouselog_tmp` PARTITIONED BY (`data_date`) STORED AS PARQUET AS
+SELECT device_id,
+       context_id,
+       city_x,
+       login_account,
+       start_time,
+       end_time,
+       object_id,
+       channel,
+       context,
+       roomid,
+       projecttype,
+       modelid,
+       projectid,
+       shaixuan,
+       prj_listid,
+       city_y,
+       city_name,
+       prj_itemname,
+       prj_loc,
+       prj_decorate,
+       prj_views,
+       b_lng,
+       b_lat,
+       price_avg,
+       price_show,
+       pic_id,
+       pic_prjid,
+       pic_prjname,
+       (CASE pic_type
+            WHEN 8 THEN 1
+            WHEN 9 THEN 2
+            WHEN 10 THEN 3
+            WHEN 11 THEN 4
+            WHEN 21 THEN 5
+            WHEN 22 THEN 6
+        END) AS pic_type,
+       pic_desc,
+       cast(pic_ting AS INT) AS pic_ting,
+       pic_wei,
+       pic_chu,
+       pic_area,
+       pic_sell_point,
+       cast(ltrim(pic_hx_totalprice, "约") as DOUBLE) as pic_hx_totalprice,
+       room_id,
+       flats,
+       price,
+       totalprice,
+       data_date
+FROM `newhouselog`
+
+
+
+CREATE TABLE `secondhouselog_tmp` PARTITIONED BY (`data_date`) STORED AS PARQUET AS
+select
+  device_id ,
+  context_id ,
+  city ,
+  login_account ,
+  start_time ,
+  end_time ,
+  content ,
+  object_id ,
+  context ,
+  secondhouse_id ,
+  esta_x ,
+  district_x ,
+  address_x ,
+  cast( btrim(streetid_x,'.0') AS INT) AS streetid_x,
+  blockid ,
+  blockshowname ,
+  purpose ,
+  structure ,
+  buildtype ,
+  buildyear   ,
+  buildarea   ,
+  subfloor    ,
+  floor       ,
+  totalfloor  ,
+  room        ,
+  hall        ,
+  toilet      ,
+  kitchen     ,
+  balcony     ,
+  forward ,
+  price       ,
+  averprice_x ,
+  environment ,
+  traffic ,
+  fitment ,
+  serverco ,
+  contactor ,
+  telno ,
+  mobile ,
+  creattime ,
+  updatetime ,
+  expiretime ,
+  city_name ,
+  block_id ,
+  blockname ,
+  district_y ,
+  cast(btrim(streetid_y,'.0') AS INT) AS streetid_y,
+  area ,
+  address_y ,
+  bus ,
+  averprice_y ,
+  updateprice ,
+  forumid ,
+  newhouseid ,
+  b_map_x ,
+  b_map_y ,
+  accuracy ,
+  map_test ,
+  b_property_type ,
+  b_green ,
+  b_parking ,
+  b_developers ,
+  b_property_company ,
+  b_property_fees ,
+  b_bus ,
+  b_metro ,
+  b_num ,
+  bi_s ,
+  bi_spell ,
+  subway ,
+  sitename ,
+  subwayrange ,
+  app ,
+  esta_y ,
+  property_fees ,
+  nofee ,
+  plot_ratio ,
+  total_room ,
+  turn_time ,
+  b_area ,
+  feature,
+  data_date
+from secondhouselog;
+
 
 
 

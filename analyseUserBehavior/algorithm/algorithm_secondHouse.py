@@ -105,6 +105,10 @@ def csv_action(df):
     df["BALCONY"].replace(np.nan, 0, inplace=True)
     df["BALCONY"] = df["BALCONY"].astype('uint8')
     df["PRICE"].replace(np.nan, 0, inplace=True)
+    df["STREETID_x"].replace(np.nan, 0, inplace=True)
+    df["STREETID_x"] = df["STREETID_x"].astype('uint8')
+    df["STREETID_y"].replace(np.nan, 0, inplace=True)
+    df["STREETID_y"] = df["STREETID_y"].astype('uint8')
     df.to_csv(HIVE_SECONDHOUSELOG_CSV_PATH, header=False, index=False, sep='|')
 
 
@@ -133,6 +137,6 @@ if __name__ == '__main__':
     df_merge_data = merge_secondhouse(df_secondhouse, df_secondhouselog, df_block)
     df_preparation = preparation(df_merge_data)
     csv_action(df_preparation)
-    algorithm_hive_transmission.begin(table="secondhouselog", table_csv="secondhouselog_csv",
-                                      local_path=HIVE_SECONDHOUSELOG_CSV_PATH,
-                                      hive_path=HIVE_SERVER_SECONDHOUSELOG_CSV_PATH)
+    # algorithm_hive_transmission.begin(table="secondhouselog", table_csv="secondhouselog_csv_tmp",
+    #                                   local_path=HIVE_SECONDHOUSELOG_CSV_PATH,
+    #                                   hive_path=HIVE_SERVER_SECONDHOUSELOG_CSV_PATH)
