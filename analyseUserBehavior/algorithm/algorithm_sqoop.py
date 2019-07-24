@@ -27,6 +27,6 @@ def begin():
 
 
 if __name__ == '__main__':
-    sshClient = SQOOPClient(sever_url="192.168.10.164", username="root", password="000000")
-    sshClient.command( "sudo -u hdfs sqoop import --connect jdbc:oracle:thin:@202.102.83.165:1521:app --username app --password app --table DWB_ACCOUNT_DEVICE_PHONE -m 1 --hive-import --hive-overwrite  --hive-database user_track")
+    sshClient = SQOOPClient(sever_url=SQOOP_URL, username=SQOOP_USERNAME, password=SQOOP_PASSWORD)
+    sshClient.command(SQOOP_COMMAND)
     sshClient.close()

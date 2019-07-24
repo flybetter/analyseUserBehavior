@@ -261,7 +261,54 @@ sudo -u hdfs sqoop import --connect jdbc:oracle:thin:@202.102.83.165:1521:app --
 sudo -u hdfs sqoop import --connect jdbc:mysql://202.102.74.25:3306/usercenter --username root --password idontcare --table account_device_phone -m 1 --hive-import --hive-overwrite  --hive-database user_track
 
 
-
+CREATE TABLE `newhouselog_login` PARTITIONED BY (`data_date`) STORED AS PARQUET AS
+SELECT new.device_id,
+       new.context_id,
+       new.city_x,
+      ( case
+       when length(trim(new.login_account)) =0 then phone.phone
+       when new.login_account= 'null' then phone.phone
+       when new.login_account is null then phone.phone
+       else new.login_account end ) as login_account  ,
+       new.start_time,
+       new.end_time,
+       new.object_id,
+       new.channel,
+       new.context,
+       new.roomid,
+       new.projecttype,
+       new.modelid,
+       new.projectid,
+       new.shaixuan,
+       new.prj_listid,
+       new.city_y,
+       new.city_name,
+       new.prj_itemname,
+       new.prj_loc,
+       new.prj_decorate,
+       new.prj_views,
+       new.b_lng,
+       new.b_lat,
+       new.price_avg,
+       new.price_show,
+       new.pic_id,
+       new.pic_prjid,
+       new.pic_prjname,
+       new.pic_type,
+       new.pic_desc,
+       new.pic_ting,
+       new.pic_wei,
+       new.pic_chu,
+       new.pic_area,
+       new.pic_sell_point,
+       new.pic_hx_totalprice,
+       new.room_id,
+       new.flats,
+       new.price,
+       new.totalprice,
+       new.data_date
+FROM newhouselog as new
+left join account_device_phone as phone on new.device_id=phone.deviceid;
 
 
 

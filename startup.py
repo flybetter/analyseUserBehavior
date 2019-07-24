@@ -45,7 +45,7 @@ def begin():
 
     algorithm_hive_transmission.update_login()
     algorithm_hive_transmission_time = datetime.now(timez)
-    print("algorithm_crm_profile synchronous finished,cost time:" + str(
+    print("algorithm_crm_profile update_login finished,cost time:" + str(
         (algorithm_hive_transmission_time - algorithm_crm_profile_time).seconds))
 
     print("end time:" + algorithm_hive_transmission_time.strftime('%Y-%m-%d %H:%M:%S'))
