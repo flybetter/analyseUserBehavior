@@ -4,6 +4,7 @@ from analyseUserBehavior.algorithm import algorithm_newHouse, algorithm_phoneDev
 from apscheduler.schedulers.blocking import BlockingScheduler
 import pytz
 from datetime import datetime
+import subprocess
 
 
 def begin():
@@ -82,6 +83,15 @@ def begin2():
     # algorithm_crm_profile_time = datetime.now(timez)
     # print("algorithm_crm_profile synchronous finished,cost time:" + str(
     #     (algorithm_crm_profile_time - algorithm_phoneDevice_time).seconds))
+
+
+def mysql_house():
+    p = subprocess.Popen("python /app/datax/bin/datax.py /app/datax/bin/mysql_house.json", shell=True,
+                         stdout=subprocess.PIPE)
+    for line in p.stdout:
+        print(line.decode('utf-8'))
+    p.wait()
+    print(p.returncode)
 
 
 if __name__ == '__main__':
