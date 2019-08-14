@@ -34,20 +34,23 @@ def begin():
     print("algorithm_secondHouse synchronous finished, cost time:" + str(
         (algorithm_secondHouse_time - algorithm_newHouse_time).seconds))
 
-    algorithm_phoneDevice.begin()
-    algorithm_phoneDevice_time = datetime.now(timez)
-    print("algorithm_phoneDevice synchronous finished,cost time:" + str(
-        (algorithm_phoneDevice_time - algorithm_newHouse_time).seconds))
+    # algorithm_phoneDevice.begin()
+    # algorithm_phoneDevice_time = datetime.now(timez)
+    # print("algorithm_phoneDevice synchronous finished,cost time:" + str(
+    #     (algorithm_phoneDevice_time - algorithm_newHouse_time).seconds))
 
-    algorithm_crm_profile.begin()
-    algorithm_crm_profile_time = datetime.now(timez)
-    print("algorithm_crm_profile synchronous finished,cost time:" + str(
-        (algorithm_crm_profile_time - algorithm_phoneDevice_time).seconds))
+    # algorithm_crm_profile.begin()
+    # algorithm_crm_profile_time = datetime.now(timez)
+    # print("algorithm_crm_profile synchronous finished,cost time:" + str(
+    #     (algorithm_crm_profile_time - algorithm_phoneDevice_time).seconds))
 
     algorithm_hive_transmission.update_login()
     algorithm_hive_transmission_time = datetime.now(timez)
+    # print("algorithm_crm_profile update_login finished,cost time:" + str(
+    #     (algorithm_hive_transmission_time - algorithm_crm_profile_time).seconds))
+
     print("algorithm_crm_profile update_login finished,cost time:" + str(
-        (algorithm_hive_transmission_time - algorithm_crm_profile_time).seconds))
+        (algorithm_hive_transmission_time - algorithm_secondHouse_time).seconds))
 
     print("end time:" + algorithm_hive_transmission_time.strftime('%Y-%m-%d %H:%M:%S'))
 
