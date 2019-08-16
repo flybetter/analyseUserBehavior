@@ -19,7 +19,7 @@
                   "select id,flats,price,totalprice from DWB_YFYJ_ROOM"
                 ],
                 "jdbcUrl": [
-                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                  "jdbc:oracle:thin:@202.102.74.64:1521:app"
                 ]
               }
             ]

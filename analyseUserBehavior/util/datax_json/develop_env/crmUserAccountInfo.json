@@ -19,7 +19,7 @@
                   "select id,idcard,phone from DWB_USER_ACCOUNT_INFO where idcard is not null"
                 ],
                 "jdbcUrl": [
-                  "jdbc:oracle:thin:@202.102.83.165:1521:app"
+                  "jdbc:oracle:thin:@202.102.74.64:1521:app"
                 ]
               }
             ]

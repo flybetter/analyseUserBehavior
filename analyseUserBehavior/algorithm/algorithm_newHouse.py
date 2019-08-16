@@ -140,7 +140,7 @@ def begin():
     df_preparation = preparation(df_merge_data)
     csv_action(df_preparation)
     algorithm_hive_transmission.begin(table="newhouselog", table_csv="newhouselog_csv")
-    redis_action(df_preparation)
+    # redis_action(df_preparation)
 
 
 if __name__ == '__main__':
