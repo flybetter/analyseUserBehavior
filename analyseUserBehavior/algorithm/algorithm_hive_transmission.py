@@ -26,7 +26,7 @@ class HiveAction(object):
         self.table = table
         self.local_path = local_path
         self.hive_path = hive_path
-        self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT)
+        self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT, auth_mechanism='GSSAPI')
         self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
         conn = connect(host=HIVE_URL)
         self.cursor = conn.cursor()
