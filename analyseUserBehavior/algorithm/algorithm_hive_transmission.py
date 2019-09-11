@@ -2,8 +2,10 @@ import ibis
 from analyseUserBehavior.algorithm import *
 from functools import wraps
 from impala.dbapi import connect
+from requests import Session
 import pytz
 from datetime import datetime, date, timedelta
+import subprocess
 
 
 def decorator(func):
@@ -26,9 +28,18 @@ class HiveAction(object):
         self.table = table
         self.local_path = local_path
         self.hive_path = hive_path
-        self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT, auth_mechanism='GSSAPI')
-        self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
-        conn = connect(host=HIVE_URL)
+        kt_cmd = 'kinit app -k -t /tmp/app_prod.keytab'
+        status = subprocess.call([kt_cmd], shell=True)
+        if status != 0:
+            print("kinit ERROR:")
+            print(subprocess.call([kt_cmd], shell=True))
+            exit()
+        session = Session()
+        session.verify = False
+        self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT, auth_mechanism='GSSAPI', session=session,
+                                      use_https=False)
+        # self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
+        conn = connect(host=HIVE_URL, auth_mechanism='GSSAPI')
         self.cursor = conn.cursor()
 
     @decorator
@@ -60,6 +71,7 @@ class HiveAction(object):
         self.cursor.execute(
             "insert into user_track.{} partition (data_date='{}') select * from user_track.{}".format(self.table,
                                                                                                       format_date,
+                                                                                                      format_date,
                                                                                                       self.table_csv))
 
 
@@ -75,9 +87,7 @@ def update_login(table_csv=SQOOP_TABLE_CSV, table=SQOOP_TABLE, local_path=None, 
 
 
 if __name__ == '__main__':
-    hive_action = HiveAction(table="secondhouselog", table_csv="secondhouselog_csv_tmp",
-                             local_path=HIVE_SECONDHOUSELOG_CSV_PATH,
-                             hive_path=HIVE_SERVER_SECONDHOUSELOG_CSV_PATH)
+    hive_action = HiveAction()
     hive_action.upload()
 
     # update_login()

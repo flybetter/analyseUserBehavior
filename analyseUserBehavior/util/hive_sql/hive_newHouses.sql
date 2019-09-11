@@ -86,8 +86,7 @@ CREATE TABLE newhouselog (
   flats       INT,
   price       DOUBLE,
   totalprice  DOUBLE
-)partitioned by (data_date string)
-COMMENT 'This is new house log table'
+)partitioned by (data_date string) COMMENT 'This is new house log table'
 STORED AS PARQUET;
 
 

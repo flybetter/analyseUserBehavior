@@ -6,7 +6,7 @@ from analyseUserBehavior.algorithm import algorithm_hive_transmission
 
 
 def custom(df):
-    df['CONTEXT'] = df['CONTEXT_ID'].split('-', 1)[1] if '-' in df['CONTEXT_ID'] else df['CONTEXT_ID']
+    df['CONTEXT'] = df['CONTEXT_ID']
     return df
 
 
@@ -17,7 +17,7 @@ def get_secondhouselog_data(file_path=FILE_SECONDHOUSELOG_PATH):
         colName = ["DEVICE_ID", "CONTEXT_ID", "CITY", "DATA_DATE", "LOGIN_ACCOUNT", "START_TIME", "END_TIME", "CONTENT",
                    "OBJECT_ID"]
         df = pd.read_csv(file_path + path, names=colName, header=None,
-                         dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str}, low_memory=False)
+                         dtype={'LOGIN_ACCOUNT': np.str, 'DATA_DATE': np.str, 'CONTEXT_ID': object}, low_memory=False)
         df['DATA_DATE'] = pd.to_datetime(df['DATA_DATE'], format='%Y%m%d', errors='coerce')
         df = df.dropna(subset=['DATA_DATE'])
         df['START_TIME'] = pd.to_datetime(df['START_TIME'], errors='coerce')
@@ -32,7 +32,8 @@ def get_secondhouse_data(file_path=FILE_SECONDHOUSE_PATH):
     paths = os.listdir(file_path)
     for path in paths:
         print(path)
-        colName = ["SECONDHOUSE_ID", "CITY_NAME_data", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID", "BLOCKSHOWNAME",
+        colName = ["SECONDHOUSE_ID", "CITY_NAME_data", "ESTA", "DISTRICT", "ADDRESS", "STREETID", "BLOCKID",
+                   "BLOCKSHOWNAME",
                    "PURPOSE", "STRUCTURE", "BUILDTYPE", "BUILDYEAR", "BUILDAREA", "SUBFLOOR", "FLOOR",
                    "TOTALFLOOR", "ROOM", "HALL", "TOILET", "KITCHEN", "BALCONY", "FORWARD", "PRICE", "AVERPRICE",
                    "ENVIRONMENT", "TRAFFIC", "FITMENT",
