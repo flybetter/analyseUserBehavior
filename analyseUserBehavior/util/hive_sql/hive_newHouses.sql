@@ -90,6 +90,53 @@ CREATE TABLE newhouselog (
 STORED AS PARQUET;
 
 
+CREATE TABLE newhouselog_login(
+  device_id STRING,
+  context_id STRING,
+  city_x STRING,
+  login_account STRING,
+  start_time STRING,
+  end_time STRING,
+  object_id STRING,
+  channel     INT,
+  context STRING,
+  roomid STRING,
+  projecttype BIGINT,
+  modelid STRING,
+  projectid   BIGINT,
+  shaixuan STRING,
+  prj_listid  BIGINT,
+  city_y STRING,
+  city_name STRING,
+  prj_itemname STRING,
+  prj_loc STRING,
+  prj_decorate STRING,
+  prj_views STRING,
+  b_lng STRING,
+  b_lat STRING,
+  price_avg   BIGINT,
+  price_show STRING,
+  pic_id STRING,
+  pic_prjid STRING,
+  pic_prjname STRING,
+  pic_type    INT,
+  pic_desc STRING,
+  pic_ting INT,
+  pic_wei     INT,
+  pic_chu     INT,
+  pic_area    DOUBLE,
+  pic_sell_point STRING,
+  pic_hx_totalprice DOUBLE,
+  room_id STRING,
+  flats       INT,
+  price       DOUBLE,
+  totalprice  DOUBLE,
+  passport_uid DOUBLE,
+  phone STRING
+)partitioned by (data_date string) COMMENT 'This is new house log login table'
+STORED AS PARQUET;
+
+
 insert into newhouselog partition (data_date='2019-07-02') select * from newhouselog_csv;
 
 

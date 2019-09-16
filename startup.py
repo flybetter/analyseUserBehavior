@@ -20,9 +20,9 @@ def begin():
     datax_command_time = datetime.now(timez)
     print("datax finished, cost time:" + str((datax_command_time - create_json_end_time).seconds))
 
-    # algorithm_sqoop.begin()
+    algorithm_sqoop.begin()
     sqoop_command_time = datetime.now(timez)
-    # print("sqoop command finished, cost time:" + str((sqoop_command_time - datax_command_time).seconds))
+    print("sqoop command finished, cost time:" + str((sqoop_command_time - datax_command_time).seconds))
 
     algorithm_newHouse.begin()
     algorithm_newHouse_time = datetime.now(timez)
@@ -40,17 +40,14 @@ def begin():
     #     (algorithm_phoneDevice_time - algorithm_newHouse_time).seconds))
 
     # algorithm_crm_profile.begin()
-    # algorithm_crm_profile_time = datetime.now(timez)
+    algorithm_crm_profile_time = datetime.now(timez)
     # print("algorithm_crm_profile synchronous finished,cost time:" + str(
     #     (algorithm_crm_profile_time - algorithm_phoneDevice_time).seconds))
 
-    # algorithm_hive_transmission.update_login()
+    algorithm_hive_transmission.update_login()
     algorithm_hive_transmission_time = datetime.now(timez)
-    # print("algorithm_crm_profile update_login finished,cost time:" + str(
-    #     (algorithm_hive_transmission_time - algorithm_crm_profile_time).seconds))
-
     print("algorithm_crm_profile update_login finished,cost time:" + str(
-        (algorithm_hive_transmission_time - algorithm_secondHouse_time).seconds))
+        (algorithm_hive_transmission_time - algorithm_crm_profile_time).seconds))
 
     print("end time:" + algorithm_hive_transmission_time.strftime('%Y-%m-%d %H:%M:%S'))
 
