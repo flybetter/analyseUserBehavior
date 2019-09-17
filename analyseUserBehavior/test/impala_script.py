@@ -14,30 +14,33 @@ def script():
 
 
 def script2():
-    date = datetime(year=2019, month=5, day=14)
-    enddate = datetime(year=2019, month=6, day=10)
+    date = datetime(year=2019, month=3, day=16)
+    enddate = datetime(year=2019, month=9, day=16)
     days = (enddate - date).days
     for i in range(days):
         simplify_time = (date + timedelta(days=i)).strftime("%Y-%-m-%-d")
         time = (date + timedelta(days=i)).strftime("%Y-%m-%d")
         print(time)
         # impala_sql(time, simplify_time)
+        impala_newhouse(time)
+        print("new house :" + time)
         impala_secondhouse(time)
+        print("second house :" + time)
 
 
-def impala_sql(time, simplify_time):
-    conn = connect(host="192.168.10.164")
+def impala_newhouse(time):
+    conn = connect(host="cdho1.prod.house365", auth_mechanism='GSSAPI')
     cursor = conn.cursor()
     cursor.execute(
-        "insert into user_track.newhouselog partition(data_date='{}') select DEVICE_ID,CONTEXT_ID,CITY_x,LOGIN_ACCOUNT,START_TIME,END_TIME,OBJECT_ID,CHANNEL,CONTEXT,ROOMID,PROJECTTYPE,MODELID,PROJECTID,SHAIXUAN,PRJ_LISTID,CITY_y,CITY_NAME,PRJ_ITEMNAME,PRJ_LOC,PRJ_DECORATE,PRJ_VIEWS,B_LNG,B_LAT,PRICE_AVG,PRICE_SHOW,PIC_ID,PIC_PRJID,PIC_PRJNAME,PIC_TYPE,PIC_DESC,PIC_TING,PIC_WEI,PIC_CHU,PIC_AREA,PIC_SELL_POINT,PIC_HX_TOTALPRICE,ROOM_ID,FLATS,PRICE,TOTALPRICE from user_track.user_profile_perfect where data_date='{}'".format(
+        "insert into user_track.newhouselog_login partition(data_date='{}') select device_id,context_id,city_x,login_account,start_time,end_time,object_id,channel,context,roomid,projecttype,modelid,projectid,shaixuan,prj_listid,city_y,city_name,prj_itemname,prj_loc,prj_decorate,prj_views,b_lng,b_lat,price_avg,price_show,pic_id,pic_prjid,pic_prjname,pic_type,pic_desc,pic_ting,pic_wei,pic_chu,pic_area,pic_sell_point,pic_hx_totalprice,room_id,flats,price,totalprice, phone.passport_uid, phone.phone from user_track.newhouselog left join user_track.dwb_account_device_phone phone on user_track.newhouselog.device_id= phone.deviceid where user_track.newhouselog.data_date = '{}'".format(
             time, time))
 
 
 def impala_secondhouse(time):
-    conn = connect(host="192.168.10.164")
+    conn = connect(host="cdho1.prod.house365", auth_mechanism='GSSAPI')
     cursor = conn.cursor()
     cursor.execute(
-        "insert into user_track.secondhouselog partition(data_date='{}') select device_id,context_id,city,login_account,start_time,end_time,content,object_id,context,secondhouse_id,esta_x,district_x,address_x,streetid_x,blockid,blockshowname,purpose,structure,buildtype,buildyear,buildarea,subfloor,floor,totalfloor,room,hall,toilet,kitchen,balcony,forward,price,averprice_x,environment,traffic,fitment,serverco,contactor,telno,mobile,creattime,updatetime,expiretime,city_name,block_id,blockname,district_y,streetid_y,area,address_y,bus,averprice_y,updateprice,forumid,newhouseid,b_map_x,b_map_y,accuracy,map_test,b_property_type,b_green,b_parking,b_developers,b_property_company,b_property_fees,b_bus,b_metro,b_num,bi_s,bi_spell,subway,sitename,subwayrange,app,esta_y,property_fees,nofee,plot_ratio,total_room,turn_time,b_area,feature from user_track.secondhouselog_back where data_date='{}'".format(
+        "insert into user_track.secondhouselog_login partition(data_date='{}')select second.device_id,second.context_id,second.city,second.login_account,second.start_time,second.end_time,second.content,second.object_id,second.context,second.secondhouse_id,second.esta_x,second.district_x,second.address_x,second.streetid_x,second.blockid,second.blockshowname,second.purpose,second.structure,second.buildtype,second.buildyear,second.buildarea,second.subfloor,second.floor,second.totalfloor,second.room,second.hall,second.toilet,second.kitchen,second.balcony,second.forward,second.price,second.averprice_x,second.environment,second.traffic,second.fitment,second.serverco,second.contactor,second.telno,second.mobile,second.creattime,second.updatetime,second.expiretime,second.city_name,second.block_id,second.blockname,second.district_y,second.streetid_y,second.area,second.address_y,second.bus,second.averprice_y,second.updateprice,second.forumid,second.newhouseid,second.b_map_x,second.b_map_y,second.accuracy,second.map_test,second.b_property_type,second.b_green,second.b_parking,second.b_developers,second.b_property_company,second.b_property_fees,second.b_bus,second.b_metro,second.b_num,second.bi_s,second.bi_spell,second.subway,second.sitename,second.subwayrange,second.app,second.esta_y,second.property_fees,second.nofee,second.plot_ratio,second.total_room,second.turn_time,second.b_area,second.feature,phone.passport_uid, phone.phone from user_track.secondhouselog second left join user_track.dwb_account_device_phone phone on second.device_id = phone.deviceid where second.data_date = '{}'".format(
             time, time))
 
 
