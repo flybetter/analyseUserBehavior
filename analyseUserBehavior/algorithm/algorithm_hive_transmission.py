@@ -28,19 +28,26 @@ class HiveAction(object):
         self.table = table
         self.local_path = local_path
         self.hive_path = hive_path
-        kt_cmd = 'kinit app -k -t /tmp/app_prod.keytab'
-        status = subprocess.call([kt_cmd], shell=True)
-        if status != 0:
-            print("kinit ERROR:")
-            print(subprocess.call([kt_cmd], shell=True))
-            exit()
-        session = Session()
-        session.verify = False
-        self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT, auth_mechanism='GSSAPI', session=session,
-                                      use_https=False)
-        # self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
-        conn = connect(host=HIVE_URL, auth_mechanism='GSSAPI')
-        self.cursor = conn.cursor()
+        env = os.getenv('active', 'develop')
+        if env == 'production':
+            kt_cmd = 'kinit app -k -t /tmp/app_prod.keytab'
+            status = subprocess.call([kt_cmd], shell=True)
+            if status != 0:
+                print("kinit ERROR:")
+                print(subprocess.call([kt_cmd], shell=True))
+                exit()
+            session = Session()
+            session.verify = False
+            self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT, auth_mechanism='GSSAPI', session=session,
+                                          use_https=False)
+            # self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
+            conn = connect(host=HIVE_URL, auth_mechanism='GSSAPI')
+            self.cursor = conn.cursor()
+        elif env == 'develop':
+            self.hdfs = ibis.hdfs_connect(host=HIVE_URL, port=HIVE_PORT)
+            self.client = ibis.impala.connect(host=HIVE_URL, database='user_track', hdfs_client=self.hdfs)
+            conn = connect(host=HIVE_URL)
+            self.cursor = conn.cursor()
 
     @decorator
     def upload(self):
@@ -58,13 +65,17 @@ class HiveAction(object):
 
     @staticmethod
     def update_login(table_csv, table_csv_tmp, table):
-        conn = connect(host=HIVE_URL, auth_mechanism='GSSAPI')
+        env = os.getenv('active', 'develop')
+        if env == 'production':
+            conn = connect(host=HIVE_URL, auth_mechanism='GSSAPI')
+        elif env == 'develop':
+            conn = connect(host=HIVE_URL)
         cursor = conn.cursor()
         timez = pytz.timezone('Asia/Shanghai')
         format_date = (datetime.now(tz=timez) - timedelta(days=1)).strftime("%Y-%m-%d")
 
         cursor.execute(
-            "create table user_track.{0}  as select csv.*,phone.passport_uid ,phone.phone from user_track.{1} csv left join user_track.dwb_account_device_phone phone on csv.device_id=phone.deviceid".format(
+            "create table user_track.{0}  as select csv.*,phone.passport_uid ,phone.phone from user_track.{1} csv left join user_track.dwb_account_device_phone phone on cåsv.device_id=phone.deviceid".format(
                 table_csv_tmp, table_csv))
 
         cursor.execute(

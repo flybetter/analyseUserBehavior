@@ -17,7 +17,7 @@ ENV active="production"
 
 # sudo docker build -t flybetter/analysis:v28 .
 
-# sudo docker run -d --env active=develop --add-host cdh1:192.168.10.164 --add-host  cdh2:192.168.10.163 --add-host cdh3:192.168.10.166 flybetter/analysis:v23
+# sudo docker run -d --env active=develop --add-host cdh1:192.168.10.164 --add-host  cdh2:192.168.10.163 --add-host cdh3:192.168.10.166 flybetter/analysis:v28
 
 #sudo docker run -d  --add-host cdho1.prod.house365:172.17.1.141 --add-host cdho2.prod.house365:172.17.1.142 flybetter/analysis:v28
 
