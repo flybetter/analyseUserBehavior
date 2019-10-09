@@ -47,7 +47,7 @@ class CrmProfile:
                 result = self.get_crm_house_data(phone, result)
                 if len(result) > 0:
                     self.crm_profile_dict[REDIS_CRM_PREFIX + phone] = result
-
+                    # self.redis_save(phone, result)
         self.redis_pipline_save()
 
     def get_crm_house_data(self, phone, result):
@@ -147,6 +147,7 @@ class CrmProfile:
         # print('redis_pipline_save')
         with self.crm_r.pipeline(transaction=False) as pipe:
             for (k, v) in self.crm_profile_dict.items():
+                print('phone:{0},value:{1}'.format(k, v))
                 pipe.hmset(k, v)
             pipe.execute()
 
