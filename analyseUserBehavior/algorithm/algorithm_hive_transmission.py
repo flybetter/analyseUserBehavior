@@ -74,6 +74,7 @@ class HiveAction(object):
         timez = pytz.timezone('Asia/Shanghai')
         format_date = (datetime.now(tz=timez) - timedelta(days=1)).strftime("%Y-%m-%d")
 
+        cursor.execute("refresh user_track.dwb_account_device_phone")
         cursor.execute(
             "create table user_track.{0}  as select csv.*,phone.passport_uid ,phone.phone from user_track.{1} csv left join user_track.dwb_account_device_phone phone on cåsv.device_id=phone.deviceid".format(
                 table_csv_tmp, table_csv))
