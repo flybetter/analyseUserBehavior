@@ -2,6 +2,7 @@ from analyseUserBehavior.algorithm import *
 import multiprocessing as mp
 from datetime import datetime
 import copy
+import urllib
 
 
 def operator_status(func):
@@ -36,6 +37,8 @@ class CrmProfile:
 
         self.crm_profile_dict = dict()
 
+        self.companyCount = self.companyHouse_url()
+
     def begin(self):
         df = self.get_crm_profile_data()
         # df = self.get_custom_crm_profile_data()
@@ -46,9 +49,10 @@ class CrmProfile:
                 result = self.get_crm_profile_detail(phone, df)
                 result = self.get_crm_house_data(phone, result)
                 if len(result) > 0:
-                    self.crm_profile_dict[REDIS_CRM_PREFIX + phone] = result
+                    self.redis_pipline_save_sample(REDIS_CRM_PREFIX + phone, result)
+                    # self.crm_profile_dict[] = result
 
-        self.redis_pipline_save()
+        # self.redis_pipline_save()
 
     def get_crm_house_data(self, phone, result):
         data = list()
@@ -95,6 +99,8 @@ class CrmProfile:
         result["bedroom"] = df['PIC_TYPE'].mean()
         result["kitchen"] = df['PIC_CHU'].mean()
         result["count"] = len(df)
+        company_df = df[df['PRJ_ITEMNAME'].isin(self.companyCount)]
+        result["companyCount"] = len(company_df)
         if len(df) > 0:
             df_result = df.sort_values(by='START_TIME', ascending=False)
             df_count = df_result.groupby('CONTEXT_ID').size().reset_index(name='COUNT')
@@ -149,6 +155,12 @@ class CrmProfile:
                 pipe.hmset(k, v)
             pipe.execute()
 
+    def redis_pipline_save_sample(self, key, mapping):
+        print('redis_pipline_save_sample,key:' + key)
+        with self.crm_r.pipeline(transaction=False) as pipe:
+            pipe.hmset(key, mapping)
+            pipe.execute()
+
     @staticmethod
     def custom_result(result):
         """
@@ -164,15 +176,33 @@ class CrmProfile:
 
         return json.dumps(result, ensure_ascii=False)
 
+    def companyHouse_url(self):
+        url = 'http://crm.house365.com/api/directProject/projects'
+        response = urllib.request.urlopen(url)
+        jsonBody = json.loads(response.read().decode(encoding='utf-8'))
+        company = list(map(lambda x: x['project_name'], jsonBody))
+        print(json.dumps(company, ensure_ascii=False))
+        return company
+
 
 def begin():
     crm_profile = CrmProfile()
     crm_profile.begin()
 
 
+def companyhouse_url():
+    url = 'http://crm.house365.com/api/directProject/projects'
+    response = urllib.request.urlopen(url)
+    jsonBody = json.loads(response.read().decode(encoding='utf-8'))
+    company = list(map(lambda x: x['project_name'], jsonBody))
+    print(json.dumps(company, ensure_ascii=False))
+    return company
+
+
 if __name__ == '__main__':
-    start_time = datetime.now()
-    print("start time :" + start_time.strftime('%Y-%m-%d %H:%M:%S'))
-    begin()
-    end_time = datetime.now()
-    print("end time:" + end_time.strftime('%Y-%m-%d %H:%M:%S') + " cost time:" + str((end_time - start_time).seconds))
+    # start_time = datetime.now()
+    # print("start time :" + start_time.strftime('%Y-%m-%d %H:%M:%S'))
+    # begin()
+    # end_time = datetime.now()
+    # print("end time:" + end_time.strftime('%Y-%m-%d %H:%M:%S') + " cost time:" + str((end_time - start_time).seconds))
+    companyhouse_url()
