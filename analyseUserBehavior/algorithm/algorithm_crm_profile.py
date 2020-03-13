@@ -3,6 +3,7 @@ import multiprocessing as mp
 from datetime import datetime
 import copy
 import urllib
+from datetime import timedelta
 
 
 def operator_status(func):
@@ -98,9 +99,14 @@ class CrmProfile:
         df = df.replace({"PIC_TYPE": di})
         result["bedroom"] = df['PIC_TYPE'].mean()
         result["kitchen"] = df['PIC_CHU'].mean()
-        result["count"] = len(df)
-        company_df = df[df['PRJ_ITEMNAME'].isin(self.companyCount)]
+
+        # get the latest 30days result
+        boundary = datetime.now() - timedelta(days=30)
+        datas = df[df['START_TIME'] > boundary].copy()
+        result["count"] = len(datas)
+        company_df = datas[datas['PRJ_ITEMNAME'].isin(self.companyCount)]
         result["companyCount"] = len(company_df)
+
         if len(df) > 0:
             df_result = df.sort_values(by='START_TIME', ascending=False)
             df_count = df_result.groupby('CONTEXT_ID').size().reset_index(name='COUNT')
