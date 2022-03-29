@@ -29,6 +29,6 @@ setup(
         'tzlocal==1.5.1',
         # 'pyspark==2.4.1',
         'ibis-framework==1.0.0',
-        'paramiko==2.6.0',
+        'paramiko==2.10.1',
     ]
 )
