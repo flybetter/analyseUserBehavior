@@ -14,7 +14,7 @@ setup(
         'idna==2.7',
         'kiwisolver==1.0.1',
         # 'matplotlib==2.2.3',
-        'numpy==1.15.1',
+        'numpy==1.22.0',
         'pandas==0.23.4',
         # 'PyHDFS==0.2.1',
         'pyparsing==2.2.0',
