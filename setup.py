@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'APScheduler==3.5.3',
-        'certifi==2018.8.24',
+        'certifi==2022.12.7',
         'chardet==3.0.4',
         'cycler==0.10.0',
         'docopt==0.6.2',
